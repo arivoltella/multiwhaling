@@ -11,7 +11,7 @@ library(viridis)
 #library(related)
 
 ## Read the VCF
-VCF1 = read.vcfR("../Achille/data/sample_SNP.vcf.gz")
+VCF1 = read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
 
 DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
 DP_melt1 = melt(DP1)    # Pour avoir les noms d'individus 
@@ -72,13 +72,13 @@ head(summary_individuals)
 
 #### Plots of VCF before filtering #### -------------------------------------------------
 
-#Depth distrib
+# Depth distrib
 g0 <- summary_position |>
   ggplot()+
   geom_histogram(aes(x = depth_pos),
 		 binwidth = 4, fill = "steelblue", color = "black") +
   scale_x_continuous(limits = c(0, 200), breaks = seq(0, 100, by = 10)) +
-  labs(x = "Distribition of average depth per site",
+  labs(x = "Distribution of average depth per site",
        y = "Count")
 
 
@@ -171,32 +171,38 @@ g7 <- DP2 |>
   reframe(mean_DP = mean(depth)) |>
   ggplot(aes(x = position, y = mean_DP, color = pop)) + 
   geom_point(alpha = 0.3) +
-  scale_y_continuous(limits = c(0,200), breaks = seq(0, 200, by = 10))
+  theme_bw() + 
+  scale_y_continuous(limits = c(0,200), breaks = seq(0, 200, by = 10)) +
+  labs(y = "Mean depth", 
+       color = "Population", 
+       title = "Mean depth per site per population")
 
 
 ## Save plots
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/DistribDepth_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/DistribDepth.png"))
 print(g0)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/DepthPerSite_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/DepthPerSite.png"))
 print(g1)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/DepthPerInd_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/DepthPerInd.png"))
 print(g2)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/NAPerSite_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/NAPerSite.png"))
 print(g3)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/NAPerInd_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/NAPerInd.png"))
 print(g4)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/HetPerSite_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/HetPerSite.png"))
 print(g5)
 dev.off()
-png(paste0("OldGenomeInfosVCF/", args[1],"_",args[2],"/HetPerInd_",args[1],"_",args[2],".png"))
+png(paste0("plot/Quality/HetPerInd.png"))
 print(g6)
 dev.off()
-
+png(paste0("plot/Quality/H.png"))
+print(g7)
+dev.off()
 
 
 
