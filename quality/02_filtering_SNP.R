@@ -1,0 +1,109 @@
+#################### 27/01/26 #####################
+############## Filtering of SNP ###################
+############# Achille RIVOLTELLA ##################
+
+# Library : 
+library(vcfR)
+library(rlist)
+library(qqman)
+library(ggplot2)
+library(tidyverse)
+
+#### Read the VCF #  
+VCF1 = read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
+DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
+
+
+# -------------------------------------------------------------------------------------
+############## NOMS & POPULATIONS ################# -----------------------------------
+# -------------------------------------------------------------------------------------
+
+names <- colnames(VCF1@gt)[-1]
+namest <- as_tibble(names)
+names_ind <- namest |>
+  mutate(pop = str_extract(names, "^[A-Za-z]+|^[0-9]+")) |>
+  mutate(pop = ifelse(pop == "A", "N_ATL",
+                      ifelse(pop == "Ber", "BERING", 
+                             ifelse(pop == "Chi", "CHILI", 
+                                    ifelse(pop == "Kar", "KARAGINSKY", 
+                                           ifelse(pop == "Pe", "PEROU", "MADAGASCAR"))))))
+list_pop <- split(names_ind$value, names_ind$pop)
+saveRDS(list_pop, "data/list_pop.RDS")
+
+
+
+# ----------------------------------------------------------------------------------
+################# FILTRES : ################ ---------------------------------------
+# ----------------------------------------------------------------------------------
+
+############ Choisir les filtres en fonction des plots de qualité obtenus #########
+################## Et des analyses que l'on veut faire ensuite ####################
+
+
+
+#### PROFONDEUR : ----
+depth = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
+                                                                           ##############################
+VCF_DP <- subset(VCF1, depth$depth_pos > 10 & depth$depth_pos < 50)        # À modifier en f° des besoins
+# Position avec trop ou pas assez de profondeur filtrées                   ##############################
+
+
+
+#### HÉTÉROZZYGOTIE : ---- 
+geno1 <- as.data.frame(extract.gt(VCF_DP, element="GT", mask=F,as.numeric=F,return.alleles = F,
+                                  convertNA = F,extract = T))
+# Génotype à chaque position pour chaque ind.
+n_ind <- dim(geno1)[2]
+
+het <- data.frame(het_pos = rowSums(geno1 == "0/1"))# Nb d'Hz / position
+
+VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10)               #### À modifier en f° des besoins
+
+
+
+#### MAF : ----
+# Fonction qui assigne les génotypes : 
+fun_geno_allele<-function(data){
+  for (i in 1:length(data)) {
+    if (data[i]=="./.") {data[i]<-"NA"}
+    if (data[i]=="0/0") {data[i]<-0}
+    if (data[i]=="0/1") {data[i]<-1}
+    if (data[i]=="1/1") {data[i]<-2}
+  }
+  return(data)
+}
+# assigne hétéro/homozygotie : 
+fun_geno_mod<-function(data){
+  for (i in 1:length(data)) {
+    if (data[i]=="./.") {data[i]<-"NA"}
+    if (data[i]=="0/0") {data[i]<-0}
+    if (data[i]=="0/1") {data[i]<-1}
+    if (data[i]=="1/1") {data[i]<-0}
+  }
+  return(data)
+}
+
+positions <- getPOS(VCF_DP_hz)
+snps_tot <- length(positions)
+
+genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
+
+# Génotype pour chaque indiv à chaque pop : 
+count_allele <- apply(genotypes, 2, fun_geno_allele) |>
+  as.numeric() |> matrix(ncol = n_ind, nrow = snps_tot, byrow=F)
+
+# À chaque position : 
+freq_ALT <- apply(count_allele, 1, sum)/ (n_ind*2)        ## Fréquence de l'allèle alternatif 
+freq_REF <- 1 - freq_ALT                                  ## Fréquence de l'allèle de Réf
+freq_both <- cbind(freq_ALT, freq_REF)
+
+
+VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1)
+# Enlève les sites non polymorphiques 
+
+
+VCF_DP_hz_SNP_ordered <- VCF_DP_hz_SNP[,c("FORMAT", unlist(list_pop))]       # Assigner chaque individu à une pop 
+
+saveRDS(VCF_DP_hz_SNP_ordered, "data/VCF_filtered.RDS")
+
+

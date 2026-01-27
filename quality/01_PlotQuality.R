@@ -22,8 +22,9 @@ geno1 <- as.data.frame(extract.gt(VCF1,element="GT", mask=F,as.numeric=F,return.
 # Génotype à chaque position pour chaque ind.
 
 
-#### Populations #### -------------------------------------------------------------------
-# Correspondance individus - population : 
+# -------------------------------------------------------------------------------------
+############## NOMS & POPULATIONS ################# -----------------------------------
+# -------------------------------------------------------------------------------------
 
 names_ind <- colnames(DP1)
 names_ind <- as_tibble(names_ind)
@@ -34,6 +35,8 @@ names_ind <- names_ind |>
                ifelse(pop == "Chi", "CHILI", 
                ifelse(pop == "Kar", "KARAGINSKY", 
                ifelse(pop == "Pe", "PEROU", "MADAGASCAR"))))))
+
+list_pop <- split(names_ind$value, names_ind$pop)
 
 names_ind |>
   summarise(n = n(), 
@@ -201,37 +204,7 @@ dev.off()
 png(paste0("plot/Quality/HetPerInd.png"))
 print(g6)
 dev.off()
-png(paste0("plot/Quality/H.png"))
+png(paste0("plot/Quality/depth_by_pop.png"))
 print(g7)
 dev.off()
-
-
-
-
-
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
