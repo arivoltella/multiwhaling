@@ -11,7 +11,8 @@ library(viridis)
 #library(related)
 
 ## Read the VCF
-VCF1 = read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
+VCF1 = read.vcfR("../Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
+# /shared/projects/multiwhaling/Achille/VCF
 
 DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
 DP_melt1 = melt(DP1)    # Pour avoir les noms d'individus 
