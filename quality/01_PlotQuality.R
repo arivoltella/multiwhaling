@@ -128,7 +128,7 @@ g4 <- summary_individuals |>
   labs(x="Ind", y = "Prop './.' site") +
   ggtitle("Prop './.' site by individuals") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
-  scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100))
+  scale_y_continuous(breaks = seq(0, 10000, by = 1000), limits = c(0,100))
 
 
 # Het per Position
@@ -155,7 +155,7 @@ g6 <- summary_individuals |>
 
 
 # Mean depth per position, per population : 
-position = as.numeric(str_remove(rownames(DP1), "1_"))
+
 DP2 <- as_tibble(DP1)
 DP2 <- DP2 |>
   mutate(position = position) |>
