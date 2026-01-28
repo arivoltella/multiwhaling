@@ -44,7 +44,7 @@ names_ind |>
 
 #### POSITION #### ----------------------------------------------------------------------
 summary_position = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
-position <- as.numeric(str_remove(rownames(summary_position), "1_"))
+position <- getPOS(VCF1)
 
 summary_position <- summary_position |>
   mutate(position = position,                                 # Position du nucléotide 
@@ -115,8 +115,8 @@ g3 <- summary_position |>
   geom_point(aes(y = sum_NA, x = position), color="purple", size = 1)+
   labs(x="pos", y = "Prop './.' site") +
   ggtitle("Prop './.' site by position") +
-  scale_x_continuous(breaks = seq(0, 1e+07, 
-                                  by = 1e+06)) +
+  scale_x_continuous(breaks = seq(0, max(position), 
+                                  by = 1000000)) +
   scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
@@ -137,8 +137,8 @@ g5 <- summary_position |>
   geom_point(aes(y = het_pos , x= position), color = "purple", size = 0.3)+
   labs(x="pos", y = "Prop '0/1' site") +
   ggtitle("Prop '0/1' site by position") +
-  scale_x_continuous(breaks = seq(0, 1e+07, 
-                                  by = 1e+06)) +
+  scale_x_continuous(breaks = seq(0, max(position), 
+                                  by = 1000000)) +
   scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
