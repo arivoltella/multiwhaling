@@ -115,7 +115,7 @@ g3 <- summary_position |>
   geom_point(aes(y = sum_NA, x = position), color="purple", size = 1)+
   labs(x="pos", y = "Prop './.' site") +
   ggtitle("Prop './.' site by position") +
-  scale_x_continuous(breaks = seq(0, position[length(position)], 
+  scale_x_continuous(breaks = seq(0, max(position), 
                                   by = 1000000)) +
   scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
@@ -137,7 +137,7 @@ g5 <- summary_position |>
   geom_point(aes(y = het_pos , x= position), color = "purple", size = 0.3)+
   labs(x="pos", y = "Prop '0/1' site") +
   ggtitle("Prop '0/1' site by position") +
-  scale_x_continuous(breaks = seq(0, position[length(position)], 
+  scale_x_continuous(breaks = seq(0, max(position), 
                                   by = 1000000)) +
   scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
