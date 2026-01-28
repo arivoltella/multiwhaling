@@ -1,13 +1,11 @@
-library(pcadapt)
 library(vcfR)
 library(ggplot2)
 library(reshape2)
 library(gridExtra)
 library(stringr)
-library(LEA)
 library(tidyverse)
-library(hrbrthemes)
-library(viridis)
+#library(hrbrthemes)
+#library(viridis)
 #library(related)
 
 ## Read the VCF
