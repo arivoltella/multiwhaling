@@ -9,7 +9,7 @@ library(tidyverse)
 #library(related)
 
 ## Read the VCF
-VCF1 = read.vcfR("../Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
+VCF1 = read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
 # /shared/projects/multiwhaling/Achille/VCF
 
 DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
@@ -47,11 +47,11 @@ summary_position = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
 position <- as.numeric(str_remove(rownames(summary_position), "1_"))
 
 summary_position <- summary_position |>
-  mutate(position = as.numeric(str_remove(rownames(summary_position), "1_")),  # Position du nucléotide 
-         sum_NA = rowSums(geno1 == "./."),                         # Somme des NA / position
-         prop_NA_ind = (sum_NA/dim(geno1)[2])*100,                 # Proportion des NA / individu
-         het_pos = rowSums(geno1 == "0/1"),                        # Nb d'Hz / position
-         prop_het = (het_pos/dim(geno1)[2])*100)                   # Proportion d'Hz / individu (%)
+  mutate(position = position,                                 # Position du nucléotide 
+         sum_NA = rowSums(geno1 == "./."),                    # Somme des NA / position
+         prop_NA_ind = (sum_NA/dim(geno1)[2])*100,            # Proportion des NA / individu
+         het_pos = rowSums(geno1 == "0/1"),                   # Nb d'Hz / position
+         prop_het = (het_pos/dim(geno1)[2])*100)              # Proportion d'Hz / individu (%)
 head(summary_position)
 
 
