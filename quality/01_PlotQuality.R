@@ -128,7 +128,7 @@ g4 <- summary_individuals |>
   labs(x="Ind", y = "Prop './.' site") +
   ggtitle("Prop './.' site by individuals") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
-  scale_y_continuous(breaks = seq(0, 10000, by = 1000), limits = c(0,10000))
+  scale_y_continuous(breaks = seq(0, 10000, by = 1000), limits = c(0,max(summary_individuals$sum_NA)))
 
 
 # Het per Position
@@ -181,28 +181,28 @@ g7 <- DP2 |>
 
 
 ## Save plots
-png(paste0("plot/Quality/DistribDepth.png"))
+png(paste0("plot/Quality/DistribDepth.png"), width = 1500, height = 1500)
 print(g0)
 dev.off()
-png(paste0("plot/Quality/DepthPerSite.png"))
+png(paste0("plot/Quality/DepthPerSite.png"), width = 1500, height = 1500)
 print(g1)
 dev.off()
-png(paste0("plot/Quality/DepthPerInd.png"))
+png(paste0("plot/Quality/DepthPerInd.png"), width = 1500, height = 1500)
 print(g2)
 dev.off()
-png(paste0("plot/Quality/NAPerSite.png"))
+png(paste0("plot/Quality/NAPerSite.png"), width = 1500, height = 1500)
 print(g3)
 dev.off()
-png(paste0("plot/Quality/NAPerInd.png"))
+png(paste0("plot/Quality/NAPerInd.png"), width = 1500, height = 1500)
 print(g4)
 dev.off()
-png(paste0("plot/Quality/HetPerSite.png"))
+png(paste0("plot/Quality/HetPerSite.png"), width = 1500, height = 1500)
 print(g5)
 dev.off()
-png(paste0("plot/Quality/HetPerInd.png"))
+png(paste0("plot/Quality/HetPerInd.png"), width = 1500, height = 1500)
 print(g6)
 dev.off()
-png(paste0("plot/Quality/depth_by_pop.png"))
+png(paste0("plot/Quality/depth_by_pop.png"), width = 1500, height = 1500)
 print(g7)
 dev.off()
 
