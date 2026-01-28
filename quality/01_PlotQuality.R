@@ -128,7 +128,7 @@ g4 <- summary_individuals |>
   labs(x="Ind", y = "Prop './.' site") +
   ggtitle("Prop './.' site by individuals") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
-  scale_y_continuous(breaks = seq(0, 10000, by = 1000), limits = c(0,100))
+  scale_y_continuous(breaks = seq(0, 10000, by = 1000), limits = c(0,10000))
 
 
 # Het per Position
