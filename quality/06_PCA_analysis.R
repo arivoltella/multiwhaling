@@ -9,8 +9,6 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(pegas)
-install.packages("coala")
-library(coala)
 library(MASS)
 
 
