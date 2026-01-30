@@ -63,7 +63,7 @@ eigen_pca <- unlist(round(eigen_pca, digits = 2))
 # Récupération des coordonnées de chaque individu dans les projections : 
 proj <- read.table("data/VCF_filtered.pca/VCF_filtered.projections", header = F)
 proj <- as_tibble(proj) |>
-  dplyr::select(1:2) |>
+  dplyr::select(1:4) |>
   mutate(pop = names_ind |> arrange(Population))
 
 pdf(paste("plot/PCA/PCA_all_pop.pdf"))
@@ -74,4 +74,21 @@ proj |>
   labs(x = paste("PC1 ", as.character(eigen_pca[1]), "%"), 
        y = paste("PC2 ", as.character(eigen_pca[2]), "%"), 
        color = "Population")
+
+proj |>
+  ggplot(aes(x = V2, y = V3, color = pop$Population)) + 
+  geom_point(size = 2) + 
+  theme_bw() + 
+  labs(x = paste("PC2 ", as.character(eigen_pca[2]), "%"), 
+       y = paste("PC3 ", as.character(eigen_pca[3]), "%"), 
+       color = "Population")
+
+proj |>
+  ggplot(aes(x = V3, y = V4, color = pop$Population)) + 
+  geom_point(size = 2) + 
+  theme_bw() + 
+  labs(x = paste("PC3 ", as.character(eigen_pca[3]), "%"), 
+       y = paste("PC4 ", as.character(eigen_pca[4]), "%"), 
+       color = "Population")
+
 dev.off()
