@@ -9,7 +9,7 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(pegas)
-
+library(pheatmap)
 
 
 
@@ -26,7 +26,6 @@ source("quality/functions_for_td.r")
 # Data nécessaires : 
 positions <- getPOS(VCF1)
 
-
 fst_moy <- data.frame(matrix(NA, nrow = length(list_pop), ncol = length(list_pop), 
                              dimnames = list(names(list_pop), names(list_pop))))
 
@@ -40,7 +39,6 @@ for (k in seq_len(ncol(pairs))) {
   fst_pairwise <- fst.hudson(VCF1, list_pop_hudson)
   
   fst_moy[i, j] <- unlist(fst_pairwise[1])                      # Valeur moyenne de fst entre 2 pop
-  fst_moy[j, i] <- unlist(fst_pairwise[1])                      # pour matrice symétrique
   
   fst_per_SNP <- unlist(fst_pairwise[2])                # Fst par position SNP
   
@@ -48,10 +46,15 @@ for (k in seq_len(ncol(pairs))) {
   manh <- cbind(rep(1, length(fst_per_SNP)), positions, fst_per_SNP)
   manh <- data.frame(names(fst_per_SNP), manh)
   colnames(manh) <- c("SNP","CHR","BP","P")
-  
+
   pdf(paste("plot/FST/", names(list_pop[i]), names(list_pop[j]), "FST.pdf", sep = "_"))
   manhattan(manh, ylim = c(0,1), logp = FALSE, ylab = "FST", suggestiveline = F, genomewideline = F)
   dev.off()
 }
 
 write.csv(fst_moy, file = "plot/FST/mean_fst_pop.csv")
+
+png("plot/FST/fst_pairwise_heatmap.png", height = 750, width = 750)
+pheatmap(fst_moy, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise Fst", 
+         color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(50))
+dev.off()
