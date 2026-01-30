@@ -9,7 +9,7 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(pegas)
-library(MASS)
+library(LEA)
 
 
 #### Read the data #  
