@@ -26,7 +26,7 @@ names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
 #### Transformer le fichier VCF en .GENO
 fun_geno_allele<-function(data){
   for (i in 1:length(data)) {
-    if (data[i]=="./.") {data[i]<-"NA"}
+    if (data[i]=="./.") {data[i]<-"9"}
     if (data[i]=="0/0") {data[i]<-0}
     if (data[i]=="0/1") {data[i]<-1}
     if (data[i]=="1/1") {data[i]<-2}
