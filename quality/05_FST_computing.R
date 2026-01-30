@@ -9,8 +9,7 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(pegas)
-library(coala)
-library(MASS)
+
 
 
 
