@@ -10,7 +10,7 @@ library(ggplot2)
 library(tidyverse)
 
 #### Read the VCF #  
-VCF1 = read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
+VCF1 <- read.vcfR("../Achille/VCF/sample_SNP.vcf.gz")
 DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
 
 
@@ -40,13 +40,11 @@ saveRDS(list_pop, "data/list_pop.RDS")
 ################## Et des analyses que l'on veut faire ensuite ####################
 
 
-
 #### PROFONDEUR : ----
 depth = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
-                                                                           ##############################
-VCF_DP <- subset(VCF1, depth$depth_pos > 10 & depth$depth_pos < 50)        # À modifier en f° des besoins
-# Position avec trop ou pas assez de profondeur filtrées                   ##############################
-
+                                                                           
+VCF_DP <- subset(VCF1, depth$depth_pos > 10 & depth$depth_pos < 60)        # À modifier en f° des besoins
+# Position avec trop ou pas assez de profondeur filtrées                   
 
 
 #### HÉTÉROZZYGOTIE : ---- 
@@ -55,10 +53,9 @@ geno1 <- as.data.frame(extract.gt(VCF_DP, element="GT", mask=F,as.numeric=F,retu
 # Génotype à chaque position pour chaque ind.
 n_ind <- dim(geno1)[2]
 
-het <- data.frame(het_pos = rowSums(geno1 == "0/1"))# Nb d'Hz / position
+het <- data.frame(het_pos = rowSums(geno1 == "0/1"))      # Nb d'Hz / position
 
 VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10)               #### À modifier en f° des besoins
-
 
 
 #### MAF : ----
@@ -93,17 +90,24 @@ count_allele <- apply(genotypes, 2, fun_geno_allele) |>
   as.numeric() |> matrix(ncol = n_ind, nrow = snps_tot, byrow=F)
 
 # À chaque position : 
-freq_ALT <- apply(count_allele, 1, sum)/ (n_ind*2)        ## Fréquence de l'allèle alternatif 
+freq_ALT <- apply(count_allele, 1, sum, na.rm = T)/ (n_ind*2)        ## Fréquence de l'allèle alternatif 
 freq_REF <- 1 - freq_ALT                                  ## Fréquence de l'allèle de Réf
 freq_both <- cbind(freq_ALT, freq_REF)
 
+# Enlève les sites non polymorphiques : 
+VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
 
-VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1)
-# Enlève les sites non polymorphiques 
+
+#### NA : ----
+genotypes <- extract.gt(VCF_DP_hz_SNP, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
+positions <- getPOS(VCF_DP_hz_SNP)
+
+NAs_pos <- rowSums(genotypes == "./.")
+VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP, NAs_pos < n_ind*0.2)
 
 
-VCF_DP_hz_SNP_ordered <- VCF_DP_hz_SNP[,c("FORMAT", unlist(list_pop))]       # Assigner chaque individu à une pop 
+VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
+# Assigner chaque individu à une pop et les mettre dans le bon ordre 
 
-saveRDS(VCF_DP_hz_SNP_ordered, "data/VCF_filtered.RDS")
-
+saveRDS(VCF_DP_hz_SNP_NA_ordered, "data/VCF_filtered.RDS")
 

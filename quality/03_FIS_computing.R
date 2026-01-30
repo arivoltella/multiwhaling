@@ -47,10 +47,10 @@ snps_tot <- length(positions)
 n_ind <- dim(genotypes)[2]
 
 count_het <- apply(genotypes, 2, fun_geno_mod) |>
-  as.numeric() |> matrix(ncol=n_ind, nrow=snps_tot, byrow=F)          # matrice numerique 0/1
+  as.numeric() |> matrix(ncol=n_ind, nrow=snps_tot, byrow=F)          # matrice numérique 0/1
 
 count_allele <- apply(genotypes, 2, fun_geno_allele) |>
-  as.numeric() |> matrix(ncol = n_ind, nrow = snps_tot, byrow=F)      # matrice numerique 0/1/2
+  as.numeric() |> matrix(ncol = n_ind, nrow = snps_tot, byrow=F)      # matrice numérique 0/1/2
 
 
 #### Boucle permettant de calculer Hz attendue et observée : 
@@ -63,18 +63,18 @@ for (i in seq_along(list_pop)) {
   ncols <- length(list_pop[[i]])
   col_range <- (a+1):(a+ncols)
   
-  hetero_obs <- apply(count_het[,col_range], 1, sum)/ncols
-  hetero_exp_temp <- apply(count_allele[,col_range], 1, sum)/(ncols*2)
-  hetero_exp <- 2 * hetero_exp_temp * (1 - hetero_exp_temp)
+  hetero_obs <- apply(count_het[,col_range], 1, sum, na.rm = T)/ncols              # Fq(Ho) / total 
+  hetero_exp_temp <- apply(count_allele[,col_range], 1, sum,  na.rm = T)/(ncols*2) # Fq(allèle ALT)
+  hetero_exp <- 2 * hetero_exp_temp * (1 - hetero_exp_temp)                        # 2pq 
   
   a <- a + ncols
   
   vec_het_obs <- cbind(vec_het_obs,hetero_obs)
   vec_het_exp <- cbind(vec_het_exp,hetero_exp)
 }
-vec_het_obs <- cbind(positions,vec_het_obs) # vector observed HET by pop
+vec_het_obs <- cbind(positions,vec_het_obs)             # vector observed HET by pop
 colnames(vec_het_obs) <- c("Position", names(list_pop))
-vec_het_exp <- cbind(positions,vec_het_exp) # Vector expected HET by pop
+vec_het_exp <- cbind(positions,vec_het_exp)             # Vector expected HET by pop
 colnames(vec_het_exp) <- c("Position", names(list_pop))
 
 all_FIS<- c()       
@@ -91,7 +91,10 @@ all_FIS <- as_tibble(all_FIS) |>
 
 fis_by_pop <- all_FIS |>
   ggplot(aes(x = positions, y = FIS, color = pop))+
-  geom_point()
+  geom_point() + 
+  labs(x = "Positions", 
+       title = "FIS along the chromosome", 
+       color = "Population")
 
 png(paste0("plot/FIS/fis_by_pop.png"))
 print(fis_by_pop)
