@@ -10,7 +10,7 @@ library(ggplot2)
 library(tidyverse)
 
 #### Read the VCF #  
-VCF_all = read.vcfR("../Achille/VCF/sample_NPP.vcf.gz")           # VCF avec toutes les positions
+VCF_all = read.vcfR("../Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz")    # VCF avec toutes les positions
 DP1 <- extract.gt(VCF_all, element='DP', as.numeric = TRUE) 
 
 list_pop <- readRDS("data/list_pop.RDS")
