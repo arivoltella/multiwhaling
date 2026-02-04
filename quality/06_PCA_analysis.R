@@ -65,6 +65,7 @@ proj <- read.table("data/VCF_filtered.pca/VCF_filtered.projections", header = F)
 proj <- as_tibble(proj) |>
   dplyr::select(1:4) |>
   mutate(pop = names_ind |> arrange(Population))
+saveRDS(proj, "plot/PCA/projections.RDS")
 
 pdf(paste("plot/PCA/PCA_all_pop.pdf"))
 proj |>

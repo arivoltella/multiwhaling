@@ -27,7 +27,7 @@ names_ind <- namest |>
                              ifelse(pop == "Chi", "CHILI", 
                                     ifelse(pop == "Kar", "KARAGINSKY", 
                                            ifelse(pop == "Pe", "PEROU", "MADAGASCAR"))))))|>
-  filter(!(value %in% c("Chi6", "A20_14")))
+  filter(!(value %in% c("Chi2", "A20_14")))
 list_pop <- split(names_ind$value, names_ind$pop)
 saveRDS(list_pop, "data/list_pop.RDS")
 
