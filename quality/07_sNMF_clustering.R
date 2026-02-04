@@ -11,6 +11,7 @@ library(tidyverse)
 library(pegas)
 library(MASS)
 library(patchwork)
+library(LEA)
 
 
 #### Read the data #  
