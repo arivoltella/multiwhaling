@@ -14,10 +14,10 @@ library(pheatmap)
 
 
 #### Read the data #  
-VCF1 = readRDS("data/VCF_filtered.RDS")
-list_pop <- readRDS("data/list_pop.RDS")
+VCF1 = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
+list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
-source("quality/functions_for_td.r")
+source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
 
 #------------------------------------------------------------------------------------------------------
 ########## FST des populations deux à deux ########## ------------------------------------------
@@ -52,9 +52,9 @@ for (k in seq_len(ncol(pairs))) {
   dev.off()
 }
 
-write.csv(fst_moy, file = "plot/FST/mean_fst_pop.csv")
+write.csv(fst_moy, file = "/shared/projects/multiwhaling/multiwhaling/plot/FST/mean_fst_pop.csv")
 
-png("plot/FST/fst_pairwise_heatmap.png", height = 750, width = 750)
+png("/shared/projects/multiwhaling/multiwhaling/plot/FST/fst_pairwise_heatmap.png", height = 750, width = 750)
 pheatmap(fst_moy, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise Fst", 
          color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(50))
 dev.off()
