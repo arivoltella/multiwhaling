@@ -30,7 +30,7 @@ whale_snmf <- snmf(input.file= "/shared/projects/multiwhaling/multiwhaling/data/
 #show(whale_snmf)
 summary(whale_snmf)
 
-pdf(file = "/shared/projects/multiwhaling/multiwhaling//Clustering/entropy_K.pdf")
+pdf(file = "/shared/projects/multiwhaling/multiwhaling/plot/Clustering/entropy_K.pdf")
 plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
 dev.off()
 
