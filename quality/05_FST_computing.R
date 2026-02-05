@@ -47,7 +47,7 @@ for (k in seq_len(ncol(pairs))) {
   manh <- data.frame(names(fst_per_SNP), manh)
   colnames(manh) <- c("SNP","CHR","BP","P")
 
-  pdf(paste("plot/FST/", names(list_pop[i]), names(list_pop[j]), "FST.pdf", sep = "_"))
+  pdf(paste("/shared/projects/multiwhaling/multiwhaling/plot/FST/", names(list_pop[i]), names(list_pop[j]), "FST.pdf", sep = "_"))
   manhattan(manh, ylim = c(0,1), logp = FALSE, ylab = "FST", suggestiveline = F, genomewideline = F)
   dev.off()
 }
