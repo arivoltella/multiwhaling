@@ -10,9 +10,9 @@ library(ggplot2)
 library(tidyverse)
 
 #### Read the VCF #  
-VCF1 <- read.vcfR("../Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
+VCF1 <- read.vcfR("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
 DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
-
+# /shared/projects/multiwhaling/Achille/VCF
 
 # -------------------------------------------------------------------------------------
 ############## NOMS & POPULATIONS ################# -----------------------------------
@@ -29,7 +29,7 @@ names_ind <- namest |>
                                            ifelse(pop == "Pe", "PEROU", "MADAGASCAR"))))))|>
   filter(!(value %in% c("Chi2", "A20_13")))
 list_pop <- split(names_ind$value, names_ind$pop)
-saveRDS(list_pop, "data/list_pop.RDS")
+saveRDS(list_pop, "/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
 
 
@@ -110,5 +110,5 @@ VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP, NAs_pos < n_ind*0.2)
 VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
 # Assigner chaque individu à une pop et les mettre dans le bon ordre 
 
-saveRDS(VCF_DP_hz_SNP_NA_ordered, "data/VCF_filtered.RDS")
+saveRDS(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
 
