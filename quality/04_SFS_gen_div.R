@@ -17,7 +17,7 @@ library(LEA)
 #### Read the data #  
 VCF_all = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_all.RDS")  # On utilise le VCF avec toutes les positions pour scaler les indices de div génétique
 VCF1 = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")         # VCF filtré auquel on va enlever les NA restants par pop
-list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
+list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop2.RDS")
 
 ### Fonctions sources 
 source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
