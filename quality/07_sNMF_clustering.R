@@ -38,7 +38,7 @@ dev.off()
 list_plot <- c()
 order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "N_ATL")
 
-for (i in 3:6) {
+for (i in 2:6) {
   best <- which.min(cross.entropy(whale_snmf, K = i))
   adm_coeff <- Q(whale_snmf, K = i, run = best)
   
