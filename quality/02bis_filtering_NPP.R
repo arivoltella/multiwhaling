@@ -10,10 +10,10 @@ library(ggplot2)
 library(tidyverse)
 
 #### Read the VCF #  
-VCF_all = read.vcfR("../Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz")    # VCF avec toutes les positions
+VCF_all = read.vcfR("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz")    # VCF avec toutes les positions
 DP1 <- extract.gt(VCF_all, element='DP', as.numeric = TRUE) 
 
-list_pop <- readRDS("data/list_pop.RDS")
+list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
 
 # ---------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ n_ind <- dim(geno1)[2]
 
 het <- data.frame(het_pos = rowSums(geno1 == "0/1"))      # Nb d'Hz / position
 
-VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10)               #### À modifier en f° des besoins
-
+VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10)      #### À modifier en f° des besoins
+rm(VCF_DP)          ## On supprime les objets intermédiaires pour éviter de prendre trop de mémoire pdt le calcul
 
 # #### MAF : on fait pas car on veut garder TOUS les sites 
 
@@ -48,10 +48,11 @@ positions <- getPOS(VCF_DP_hz)
 
 NAs_pos <- rowSums(genotypes == "./.")
 VCF_DP_hz_NA <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
-
+rm(VCF_DP_hz)
 
 VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_NA[,c("FORMAT", unlist(list_pop))]       
 # Assigner chaque individu à une pop et les mettre dans le bon ordre 
+rm(VCF_DP_hz_NA)
 
-saveRDS(VCF_DP_hz_SNP_NA_ordered, "data/VCF_filtered_all.RDS")
+saveRDS(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_all.RDS")
 
