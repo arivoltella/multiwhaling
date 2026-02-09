@@ -111,4 +111,5 @@ VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]
 # Assigner chaque individu à une pop et les mettre dans le bon ordre 
 
 saveRDS(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
-
+# Sauvegarder en .vcf aussi 
+write.vcf(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.vcf.gz")
