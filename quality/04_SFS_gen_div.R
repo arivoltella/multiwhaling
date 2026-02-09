@@ -19,6 +19,8 @@ VCF_all = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_
 VCF1 = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")         # VCF filtré auquel on va enlever les NA restants par pop
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop2.RDS")
 
+list_pop$all <- unlist(list_pop, use.names = F)
+
 ### Fonctions sources 
 source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
 
@@ -43,6 +45,8 @@ for (i in seq_along(list_pop)) {
   NAs <- rowSums(genotypes == "./.")
   data_all <- subset(data_all, NAs < 1)
   positions_all <- getPOS(data_all)
+  
+  saveRDS(positions_all, paste("/shared/projects/multiwhaling/multiwhaling/data/vect_position/pos_", names(list_pop[i]), ".RDS", sep = ""))
   
   ######## Calcul du SFS : 
   dati_bin <- vcfR2DNAbin(data, extract.indels = TRUE, consensus = FALSE, 
