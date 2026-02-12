@@ -15,13 +15,14 @@ colnames(popmap) <- c("Ind", "pop")
 # Pour ordre des individus sur le plot : 
 order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "N_ATL")
 
+
 # Réarrangement du tibble : 
 admix <- as_tibble(admix) |>
-  dplyr::select(-c(X1, X4)) |>
+  dplyr::select(2:(ncol(admix)-1)) |>
   mutate(ind = popmap$Ind, 
          pop = factor(popmap$pop, levels = order)) |>
   arrange(pop) |>
-  pivot_longer(cols = 1:2, names_to = "K", values_to = "Ancestry_prop") |>
+  pivot_longer(cols = 1:(ncol(admix)-2), names_to = "K", values_to = "Ancestry_prop") |>
   mutate(K = gsub("X", "", K))
 
 # Plot de structure : 
@@ -29,9 +30,9 @@ plot_admix <- admix |>
     mutate(ind = factor(ind, levels = unique(admix$ind))) |>
   ggplot(aes(x = ind, y = Ancestry_prop, fill = K, color = K)) + 
   geom_col() + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 3, color = "black")) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 5, color = "black")) + 
   labs(x = "Individu", 
        y = "Ancestry proportions")
 
 # Sauvegarde du graph : 
-ggsave("plot_admix.png")
+ggsave(paste("plot_admix_", (ncol(admix)-2), ".png", sep = ""))
