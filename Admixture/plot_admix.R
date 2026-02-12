@@ -9,7 +9,7 @@ library(tidyverse)
 
 # Charger données : 
 admix <- read_table("prop_admix.txt", col_names =F)
-popmap <- read_table("../pop_map.txt", col_names =F)
+popmap <- read_table("/shared/projects/multiwhaling/arivoltella/local_env/popmap.txt", col_names =F)
 colnames(popmap) <- c("Ind", "pop")
 
 # Pour ordre des individus sur le plot : 
