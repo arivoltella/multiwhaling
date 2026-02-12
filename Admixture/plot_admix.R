@@ -17,7 +17,7 @@ order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "N_ATL")
 
 
 # Réarrangement du tibble : 
-admix <- as_tibble(admix) |>
+admix2 <- as_tibble(admix) |>
   dplyr::select(2:(ncol(admix)-1)) |>
   mutate(ind = popmap$Ind, 
          pop = factor(popmap$pop, levels = order)) |>
@@ -26,8 +26,8 @@ admix <- as_tibble(admix) |>
   mutate(K = gsub("X", "", K))
 
 # Plot de structure : 
-plot_admix <- admix |>
-    mutate(ind = factor(ind, levels = unique(admix$ind))) |>
+plot_admix <- admix2 |>
+    mutate(ind = factor(ind, levels = unique(admix2$ind))) |>
   ggplot(aes(x = ind, y = Ancestry_prop, fill = K, color = K)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 5, color = "black")) + 
@@ -35,4 +35,7 @@ plot_admix <- admix |>
        y = "Ancestry proportions")
 
 # Sauvegarde du graph : 
-ggsave(paste("plot_admix_", (ncol(admix)-2), ".png", sep = ""))
+ggsave(paste("plot_admix_", (ncol(admix)-2), ".png", sep = ""), width = 7, height = 5)
+saveRDS(admix2, paste("admix_", (ncol(admix)-2), ".RDS", sep = ""))
+
+
