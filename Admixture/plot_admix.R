@@ -5,7 +5,7 @@
 #
 
 
-library(tydiverse)
+library(tidyverse)
 
 # Charger données : 
 admix <- read_table("prop_admix.txt", col_names =F)
