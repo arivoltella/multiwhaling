@@ -94,22 +94,24 @@ count_allele <- apply(genotypes, 2, fun_geno_allele) |>
 freq_ALT <- apply(count_allele, 1, sum, na.rm = T)/ (n_ind*2)        ## Fréquence de l'allèle alternatif 
 freq_REF <- 1 - freq_ALT                                  ## Fréquence de l'allèle de Réf
 freq_both <- cbind(freq_ALT, freq_REF)
+maf <- apply(freq_both, 1, min)
 
 # Enlève les sites non polymorphiques : 
 VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
+VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
 
 
 #### NA : ----
-genotypes <- extract.gt(VCF_DP_hz_SNP, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
-positions <- getPOS(VCF_DP_hz_SNP)
+genotypes <- extract.gt(VCF_DP_hz_SNP_MAF, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
+positions <- getPOS(VCF_DP_hz_SNP_MAF)
 
 NAs_pos <- rowSums(genotypes == "./.")
-VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP, NAs_pos < n_ind*0.2)
+VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP_MAF, NAs_pos < n_ind*0.2)
 
 
 VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
 # Assigner chaque individu à une pop et les mettre dans le bon ordre 
 
-saveRDS(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
+saveRDS(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_maf.RDS")
 # Sauvegarder en .vcf aussi 
-write.vcf(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.vcf.gz")
+write.vcf(VCF_DP_hz_SNP_NA_ordered, "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_maf.vcf.gz")
