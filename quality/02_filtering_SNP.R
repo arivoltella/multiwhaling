@@ -30,7 +30,7 @@ names_ind <- namest |>
   filter(!(value %in% c("Chi2", "A20_13")))
 list_pop <- split(names_ind$value, names_ind$pop)
 saveRDS(list_pop, "/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
-
+saveRDS(names_ind, "/shared/projects/multiwhaling/multiwhaling/data/names_ind.RDS")
 
 
 # ----------------------------------------------------------------------------------
