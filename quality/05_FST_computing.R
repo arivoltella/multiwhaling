@@ -15,7 +15,7 @@ library(pheatmap)
 
 #### Read the data #  
 VCF1 = read.vcfR("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_maf_LD_Pruned.vcf.gz")
-list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
+list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop_basins.RDS")
 
 source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
 
@@ -47,14 +47,14 @@ for (k in seq_len(ncol(pairs))) {
   manh <- data.frame(names(fst_per_SNP), manh)
   colnames(manh) <- c("SNP","CHR","BP","P")
 
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/plot/FST/", names(list_pop[i]), names(list_pop[j]), "FST_pruned.pdf", sep = "_"))
+  pdf(paste("/shared/projects/multiwhaling/multiwhaling/plot/FST/", names(list_pop[i]), names(list_pop[j]), "FST_basins.pdf", sep = "_"))
   manhattan(manh, ylim = c(0,1), logp = FALSE, ylab = "FST", suggestiveline = F, genomewideline = F)
   dev.off()
 }
 
-write.csv(fst_moy, file = "/shared/projects/multiwhaling/multiwhaling/plot/FST/mean_fst_pop_pruned.csv")
+write.csv(fst_moy, file = "/shared/projects/multiwhaling/multiwhaling/plot/FST/mean_fst_pop_basins.csv")
 
-png("/shared/projects/multiwhaling/multiwhaling/plot/FST/fst_pairwise_heatmap_pruned.png", height = 750, width = 750)
+png("/shared/projects/multiwhaling/multiwhaling/plot/FST/fst_pairwise_heatmap_basins.png", height = 750, width = 750)
 pheatmap(fst_moy, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise Fst", 
          color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(50))
 dev.off()
