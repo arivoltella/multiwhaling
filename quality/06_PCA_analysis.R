@@ -51,7 +51,7 @@ whale_pca <- pca(input.file = "/shared/projects/multiwhaling/multiwhaling/data/V
 summary(whale_pca)
 
 # Eigenvalues : 
-pdf("/shared/projects/multiwhaling/multiwhaling/plot/PCA/eigenvalues_all_pop.pdf")
+pdf("/shared/projects/multiwhaling/multiwhaling/plot/PCA/eigenvalues_all_pop_maf_LD_pruned.pdf")
 plot(whale_pca, lwd = 5, col = "blue", cex = .7, xlab = ("Factors"), ylab = "Eigenvalues")
 dev.off()
 

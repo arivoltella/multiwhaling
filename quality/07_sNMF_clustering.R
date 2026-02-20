@@ -15,7 +15,7 @@ library(LEA)
 
 
 #### Read the data #  
-VCF1 = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
+VCF1 = read.vcfR("/shared/projects/multiwhaling/multiwhaling/data/VCF_maf_LD_Pruned.vcf")
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
 names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
@@ -25,12 +25,12 @@ names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
 ################## sNMF clustering ############## ------------------------------------------
 # ------------------------------------------------------------------------------------------
 
-whale_snmf <- snmf(input.file= "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.geno", 
+whale_snmf <- snmf(input.file= "/shared/projects/multiwhaling/multiwhaling/data/VCF_maf_LD_Pruned.geno", 
                    K= 1:6, repetitions = 3, project="new", entropy=T)
 #show(whale_snmf)
 summary(whale_snmf)
 
-pdf(file = "/shared/projects/multiwhaling/multiwhaling/plot/Clustering/entropy_K.pdf")
+pdf(file = "/shared/projects/multiwhaling/multiwhaling/plot/Clustering/entropy_K_maf_LD_Pruned.pdf")
 plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
 dev.off()
 
@@ -61,7 +61,7 @@ for (i in 2:6) {
 }
 
 structure <- wrap_plots(list_plot) + plot_layout(axes = "collect")
-ggsave("/shared/projects/multiwhaling/multiwhaling/plot/Clustering/structure.png", height = 5, width = 9)
+ggsave("/shared/projects/multiwhaling/multiwhaling/plot/Clustering/structure_maf_LD_Pruned.png", height = 5, width = 9)
 
 
 
