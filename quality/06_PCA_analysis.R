@@ -13,7 +13,7 @@ library(LEA)
 
 
 #### Read the data #  
-VCF1 = readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_maf_LD_Pruned.vcf.gz")
+VCF1 = read.vcfR("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_maf_LD_Pruned.vcf.gz")
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
 names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
