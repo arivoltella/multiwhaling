@@ -7,7 +7,7 @@ library(vcfR)
 library(LDheatmap)
 
 # Import data : 
-VCF1 <- read.vcfR("/shared/projects/multiwhaling/Achille/VCF/sample_SNP.vcf.gz")
+VCF1 <- read.vcfR("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
 
 # Enlever les 2 individus apparentés : 
@@ -18,7 +18,6 @@ pos <- getPOS(VCF1)
 pos_matrix <- seq(1,length(pos),100)
 
 VCF_to_LDheatmap <- VCF1[pos_matrix,]
-
 
 #### Visualiser le déséquilibre de liaison sur une heatmap : 
 snpMatrix <- vcfR2SnpMatrix(VCF_to_LDheatmap)
