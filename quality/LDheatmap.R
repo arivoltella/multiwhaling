@@ -86,10 +86,10 @@ print(data_bin) #regarder s'il y a bien 100 fois moins de SNP
 snp_matrix <- vcfR2SnpMatrix(data_bin, phased = NULL, subjects = NULL)
 
 # Nom du fichier png et paramètre du png
-nompng = paste0("LDheatmap_",vcfname,"_",chr,".png")
-png(nompng, width = 11.69*1000, height = 8.27*1000, res = 1000)
+png(paste0("plot/LD_heatmap/LDheatmap_",vcfname,"_",chr,".png"),
+    width = 11.69*1000, height = 8.27*1000, res = 1000)
 
-info_titre=paste0("fichier = ",vcfname," / bin size = ",poubelle_taille)
+info_titre = paste0("fichier = ",vcfname," / bin size = ",poubelle_taille)
 LD <- LDheatmap(snp_matrix$data, snp_matrix$genetic.distances,LDmeasure = "r", flip = T, 
                 color = colorRampPalette(c("darkred", "lightcoral", "white"))(50),title = info_titre)
 
