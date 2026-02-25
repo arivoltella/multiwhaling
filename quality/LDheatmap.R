@@ -59,7 +59,7 @@ vcf = "/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_chr9.vcf.gz"
 vcf1<-read.vcfR(vcf, verbose = TRUE)
 vcfname <- gsub(".vcf.gz", "", basename(vcf))
 
-poubelle_taille = 500
+poubelle_taille = 50
 
 ##### Boucle pour faire les vcf par chromosome : #### --------------------------
 chromosomes <- unique(vcf1@fix[, "CHROM"])
