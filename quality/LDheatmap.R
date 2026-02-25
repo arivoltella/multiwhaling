@@ -78,7 +78,7 @@ rm(vcf1,vcf_sub)
 ##### Réalisation des plots de LD : ##### --------------------------------------
 for (chr in chromosomes) {
 # 1/ bin data
-vcf_file <- paste0(chr, ".vcf")  #ajouter l'extension
+vcf_file <- paste0("chr_",chr, ".vcf")  #ajouter l'extension
 data_bin <- bin_snps(vcf = get(vcf_file), bin_size = poubelle_taille)
 print(data_bin) #regarder s'il y a bien 100 fois moins de SNP
 
