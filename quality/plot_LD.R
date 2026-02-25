@@ -7,14 +7,11 @@ library(vcfR)
 library(LDheatmap)
 
 # Import data : 
-VCF1 <- read.vcfR("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_9_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz")
-list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/list_pop.RDS")
+VCF1 <- read.vcfR("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered_chr9.vcf.gz")
 
-# Enlever les 2 individus apparentés : 
-VCF1 <- VCF1[,c("FORMAT", unlist(list_pop))]
+
+# Et on ne garde qu'un SNP tous les 100 pour diminuer temps de calcul :
 pos <- getPOS(VCF1)
-
-# Et on ne garde qu'un SNP tous les 100 pour diminuer temps de calcul : 
 pos_matrix <- seq(1,length(pos),100)
 
 VCF_to_LDheatmap <- VCF1[pos_matrix,]
@@ -30,7 +27,7 @@ print("Type de l'objet que l'on donne à LD_heatmap")
 str(snpMatrix$data)
 
 # Sauvegarde du plot : 
-png("LD_chr9.png")
+png("plot/LD_heatmap/LD_chr9.png")
 LDheatmap(snpMatrix$data, 
           genetic.distances = pos_LDhm, 
           color = colorRampPalette(c("darkred","red", "white"))(20), 
