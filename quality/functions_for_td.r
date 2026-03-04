@@ -312,7 +312,7 @@ born_inf_fin<-c()
 born_sup_fin<-c()
 n_pop<-length(lista_pop)
 for (z in 1:n_pop){
-####ciclo per prendere i limiti di ciascuna pop dove vedere se lo SNP c'é in almeno un individuo
+####ciclo per prendere i limiti di ciascuna pop dove vedere se lo SNP c'? in almeno un individuo
 if (z==1) {
 born_inf=1
 born_sup=length(lista_pop[[z]])
@@ -346,7 +346,7 @@ return(risultato)
 ################# FUNZIONE 24  ############################# calcola 2S-SFS pairwise per fastsimcoal. Ha bisogno di funzione 23 e 24
 ############################################################################################################################## 
 calcola_sfs2D_pairwise<-function(dati,lista_pop){
-n_ind<-2*length(unlist(lista_pop)) ### n° of chromosomes, to know who is the MAF
+n_ind<-2*length(unlist(lista_pop)) ### n? of chromosomes, to know who is the MAF
 dati2<-dati[,c("FORMAT", unlist(lista_pop))] ### riordino individui per assegnare pop
 genotype<-extract.gt(dati2, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
 qqq=apply(genotype, 1, fun_geno_mod)
@@ -370,7 +370,7 @@ new_list<-list.append(new_list,matrice)
 ########
 
 for (z in 1:nrow(mat_con_alt)){
-if (mat_con_alt[z,ncol(mat_con_alt)]<(n_ind/2)) { ### il MAF é l'allele ALT
+if (mat_con_alt[z,ncol(mat_con_alt)]<(n_ind/2)) { ### il MAF ? l'allele ALT
 indice_list<-1
 for (i in 1:(length(lista_pop)-1)){
 for (j in 2:length(lista_pop)){
@@ -380,7 +380,7 @@ indice_list<-indice_list+1
 }
 }
 }
-} else if (mat_con_alt[z,ncol(mat_con_alt)]>(n_ind/2)) { ### il MAF é l"allele REF
+} else if (mat_con_alt[z,ncol(mat_con_alt)]>(n_ind/2)) { ### il MAF ? l"allele REF
 indice_list<-1
 for (i in 1:(length(lista_pop)-1)){
 for (j in 2:length(lista_pop)){
@@ -434,7 +434,7 @@ new_list<-list.append(new_list,matrice)
 ########
 n_ind<-ncol(ogg_geno)-1
 for (z in 1:nrow(ogg_geno)){
-if (ogg_geno[z,ncol(ogg_geno)]<(n_ind/2)) { ### il MAF é l'allele ALT
+if (ogg_geno[z,ncol(ogg_geno)]<(n_ind/2)) { ### il MAF ? l'allele ALT
 indice_list<-1
 for (i in 1:(length(lista_pop)-1)){
 for (j in 2:length(lista_pop)){
@@ -444,7 +444,7 @@ indice_list<-indice_list+1
 }
 }
 }
-} else if (ogg_geno[z,ncol(ogg_geno)]>(n_ind/2)) { ### il MAF é l"allele REF
+} else if (ogg_geno[z,ncol(ogg_geno)]>(n_ind/2)) { ### il MAF ? l"allele REF
 indice_list<-1
 for (i in 1:(length(lista_pop)-1)){
 for (j in 2:length(lista_pop)){
@@ -484,7 +484,7 @@ return(fst_parwise_obs)
 ################# FUNZIONE 26  ############################# calcola fst pairwise e bootstrap. Ha bisogno di funzione 23 e 24
 ############################################################################################################################## 
 calcola_fst_pairwise_bootstrap<-function(dati,lista_pop, maf, boot){
-n_ind<-2*length(unlist(lista_pop)) ### n° of chromosomes, to know who is the MAF
+n_ind<-2*length(unlist(lista_pop)) ### n? of chromosomes, to know who is the MAF
 dati2<-dati[,c("FORMAT", unlist(lista_pop))] ### riordino individui per assegnare pop
 genotype<-extract.gt(dati2, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
 qqq=apply(genotype, 1, fun_geno_mod)
@@ -514,6 +514,25 @@ fst_bootstrapped<-rbind(fst_bootstrapped,pairwise_fst_temp)
 lista_finale<-list(pairwise_fst_obs, fst_bootstrapped)
 return(lista_finale)
 }
+
+
+################# FUNZIONE 26a  ############################# besoin des fonctions 23 e 24
+############################################################################################################################## 
+
+calcola_fst_pairwise_nobootstrap<-function(dati,lista_pop, maf){
+  n_ind<-2*length(unlist(lista_pop)) ### n? of chromosomes, to know who is the MAF
+  dati2<-dati[,c("FORMAT", unlist(lista_pop))] ### riordino individui per assegnare pop
+  genotype<-extract.gt(dati2, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE) ### prendo i genotipi in 1/0
+  qqq=apply(genotype, 1, fun_geno_mod)
+  genotype_num<-matrix(as.numeric(qqq), ncol=ncol(genotype), nrow=nrow(genotype), byrow=T) ### a questo devo applicare funziona conta ALT
+  colnames(genotype_num)<-unlist(lista_pop)
+  mat_con_alt<-t(apply(genotype_num, 1, fun_conta_ALT_2, lista_pop)) ### each column is the sim of ALT for each pop. Last colomn is the total ALT, which is needed to know who is the global MAF
+  pairwise_fst_obs<-calcola_fst_da_geno(mat_con_alt, lista_pop, maf)
+  
+  return(pairwise_fst_obs)
+}
+
+
 ####################################################################################################################################################################################
 
 ###################### CREATE SQUARE DISTANCE MATRIX FROM VECTOR OF DISTANCE COMPUTED FROM MY REYNOLDS FUNCTION
