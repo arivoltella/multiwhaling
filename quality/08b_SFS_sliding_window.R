@@ -71,7 +71,7 @@ for (i in 1:length(low_bound)) {
 # Mise en forme des données : 
 positions_plot <- (upper_bound+low_bound)/2
 sfs_spectre_sliding
-sfs_spectre_final <- na.omit(cbind(positions_plot, sfs_spectre_sliding))
+sfs_spectre_final <- as.data.frame(na.omit(cbind(positions_plot, sfs_spectre_sliding)))
 write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/sfs_spectre_sliding.csv")
 
 # Calculer SFS norm par pop : 
