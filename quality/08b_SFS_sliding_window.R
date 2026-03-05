@@ -12,7 +12,7 @@ library(adegenet)
 library(patchwork)
 
 # Data : 
-VCF1 <- read.vcfR("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
+VCF1 <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
 list_pop <- readRDS("data/list_pop.RDS")
 
 source("quality/functions_for_td.r")
