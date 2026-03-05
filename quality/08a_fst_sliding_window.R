@@ -98,8 +98,8 @@ for (k in seq_len(ncol(pairs))) {
     list_sliding[[k]] <- plot_sliding 
 }
 
-write_csv(finale_fst, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/fst_pairwise_sliding.csv")
-saveRDS(list_sliding, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/list_sliding_fst.RDS")
+write_csv(finale_fst, "/shared/home/arivoltella/fst_pairwise_sliding.csv")
+saveRDS(list_sliding, "/shared/home/arivoltella/list_sliding_fst.RDS")
 
 
 
