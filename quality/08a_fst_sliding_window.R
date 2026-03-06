@@ -64,7 +64,7 @@ for (i in 1:length(low_bound)) {
 positions_plot <- (upper_bound+low_bound)/2
 finale_fst <- na.omit(cbind(positions_plot, fst_pairwise_sliding))
 finale_fst <- as_tibble(finale_fst)
-write_csv(finale_fst, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/fst_pairwise_sliding_1e5_25000.csv")
+write_csv(finale_fst, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/fst_pairwise_sliding_1e5_25000.csv")
 
 
 list_sliding <- list()
@@ -98,8 +98,8 @@ for (k in seq_len(ncol(pairs))) {
     list_sliding[[k]] <- plot_sliding 
 }
 
-write_csv(finale_fst, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/fst_pairwise_sliding_1e5_25000.csv")
-saveRDS(list_sliding, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/list_sliding_fst_1e5_25000.RDS")
+write_csv(finale_fst, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/fst_pairwise_sliding_1e5_25000.csv")
+saveRDS(list_sliding, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/list_sliding_fst_1e5_25000.RDS")
 
 
 
