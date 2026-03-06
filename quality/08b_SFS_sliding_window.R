@@ -25,8 +25,8 @@ maf <- 0
 
 #### Préparation des bornes à chaque itération : -------------------------------
 
-slide <- 250000
-window <- 1000000
+slide <- 25000
+window <- 100000
 
 vec_pos <- getPOS(VCF1)
 n_pop <- length(list_pop)
@@ -72,7 +72,7 @@ for (i in 1:length(low_bound)) {
 positions_plot <- (upper_bound+low_bound)/2
 sfs_spectre_sliding
 sfs_spectre_final <- as.data.frame(na.omit(cbind(positions_plot, sfs_spectre_sliding)))
-write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/sfs_spectre_sliding.csv")
+write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/sfs_spectre_sliding_1e5_25000.csv")
 
 # Calculer SFS norm par pop : 
 a <- 0
@@ -99,7 +99,7 @@ for (i in seq_along(list_pop)) {
            W = W/window,              # Ici, ça correspond à la taille de la fenêtre sélectionnée
            Pop = paste(names(list_pop[i])))              
   
-  saveRDS(divgen_spectre, paste("/shared/projects/multiwhaling/multiwhaling/plot/SFS/sliding_SFS_", names(list_pop[i]), ".RDS", sep = ""))
+  saveRDS(divgen_spectre, paste("/shared/projects/multiwhaling/multiwhaling/plot/SFS/sliding_SFS_1e5_25000_", names(list_pop[i]), ".RDS", sep = ""))
   div_gen_final <- rbind(div_gen_final, divgen_spectre)
   
   # ----------  #### Plot des indices le long du chromosome : 
@@ -120,5 +120,5 @@ for (i in seq_along(list_pop)) {
   a <- a + n_cols
 }
 
-saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/div_gen_final.RDS")
-saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/list_plot_div.RDS")
+saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/div_gen_final_1e5_25000.RDS")
+saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/list_plot_div_1e5_25000.RDS")
