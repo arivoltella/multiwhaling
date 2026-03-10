@@ -41,7 +41,8 @@ upper_bound <- VectPosFiltered[upper_bound_indice]      # Prend positions 100000
 
 #### Pour chaque fenêtre : -----------------------------------------------------
 
-sfs_spectre_sliding <- c()        
+sfs_spectre_sliding <- c()
+nb_pos_bywindow <- c()
 
 for (i in 1:length(low_bound)) {
   fenetre = which(vec_pos > low_bound[i] & vec_pos < upper_bound[i])
