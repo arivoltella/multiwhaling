@@ -28,26 +28,30 @@ maf <- 0
 
 #### Préparation des bornes à chaque itération : -------------------------------
 
-slide <- 25000
-window <- 100000
+slide <- 10000
+window <- 50000
 
 vec_pos <- getPOS(VCF1)
-n_pop <- length(list_pop)
-low_bound_indice <- seq(1, max(vec_pos) + slide, slide)
-upper_bound_indice <- seq(window, max(vec_pos) + slide + window, slide)
+
+low_bound_indice <- seq(1, length(VectPosFiltered) + slide, slide)
+upper_bound_indice <- seq(window, length(VectPosFiltered) + slide + window, slide)
 
 low_bound <- VectPosFiltered[low_bound_indice]          # Prend positions 1, 25001, 50001, ... dans ce vecteur
+low_bound <- low_bound[!is.na(low_bound)]
+
 upper_bound <- VectPosFiltered[upper_bound_indice]      # Prend positions 100000, 125000, 150000, ... 
+upper_bound <- upper_bound[!is.na(upper_bound)]
+
 
 #### Pour chaque fenêtre : -----------------------------------------------------
 
 sfs_spectre_sliding <- c()
-nb_pos_bywindow <- c()
+#nb_pos_bywindow <- c()
 
 for (i in 1:length(low_bound)) {
-  fenetre = which(vec_pos > low_bound[i] & vec_pos < upper_bound[i])
+  fenetre = which(vec_pos >= low_bound[i] & vec_pos <= upper_bound[i])
   
-  nb_pos_bywindow[i] <- length(which(VectPosFiltered > low_bound[i] & VectPosFiltered < upper_bound[i]))
+  #nb_pos_bywindow[i] <- length(which(VectPosFiltered >= low_bound[i] & VectPosFiltered <= upper_bound[i]))
   
   # ------- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ----------
   if (length(fenetre) > 0) {
@@ -71,7 +75,7 @@ for (i in 1:length(low_bound)) {
   }
 }
     
-saveRDS(nb_pos_bywindow, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/nb_pos_bywindow.RDS")
+#saveRDS(nb_pos_bywindow, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/nb_pos_bywindow.RDS")
 # ------------------------------------------------------------------------------
 #################### Calculs des indices de diversité ##########################
 # ------------------------------------------------------------------------------
@@ -79,7 +83,7 @@ saveRDS(nb_pos_bywindow, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/nb
 # Mise en forme des données : 
 positions_plot <- (upper_bound+low_bound)/2
 sfs_spectre_final <- as.data.frame(na.omit(cbind(positions_plot, sfs_spectre_sliding)))
-write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/sfs_spectre_sliding_1e5_25000.csv")
+write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/sfs_spectre_sliding_1e5_25000.csv")
 
 # Calculer SFS norm par pop : 
 a <- 0
@@ -102,11 +106,11 @@ for (i in seq_along(list_pop)) {
   
   # ---------- #### Faire le scaling par le nombre de positions comprises dans chaque fenêtre 
   divgen_spectre <- divgen_spectre |>
-    mutate(Pi = Pi/nb_pos_bywindow,            # Pour les deux estimateurs, on scale par le nb total de positions séquencées (SNP & NPP)
-           W = W/nb_pos_bywindow,              
+    mutate(Pi = Pi/window,            # Pour les deux estimateurs, on scale par le nb total de positions séquencées (SNP & NPP)
+           W = W/window,              
            Pop = paste(names(list_pop[i])))              
   
-  saveRDS(divgen_spectre, paste("/shared/projects/multiwhaling/multiwhaling/plot/SFS/sliding_SFS_1e5_25000_", names(list_pop[i]), ".RDS", sep = ""))
+  saveRDS(divgen_spectre, paste("/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/sliding_SFS_1e5_25000_", names(list_pop[i]), ".RDS", sep = ""))
   div_gen_final <- rbind(div_gen_final, divgen_spectre)
   
   # ----------  #### Plot des indices le long du chromosome : 
@@ -127,5 +131,5 @@ for (i in seq_along(list_pop)) {
   a <- a + n_cols
 }
 
-saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/div_gen_final_1e5_25000.RDS")
-saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/SFS/list_plot_div_1e5_25000.RDS")
+saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/div_gen_final_1e5_25000.RDS")
+saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/list_plot_div_1e5_25000.RDS")
