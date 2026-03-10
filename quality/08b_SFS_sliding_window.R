@@ -14,7 +14,6 @@ library(patchwork)
 # Data : 
 VCF1 <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/VCF_filtered.RDS")
 VectPosFiltered <- readRDS("/shared/projects/multiwhaling/multiwhaling/data/vect_position/pos_all.RDS")         # Toutes positions du chromosomes 
-VectPosFiltered <- VectPosFiltered$x
 list_pop <- readRDS("data/list_pop.RDS")
 
 source("quality/functions_for_td.r")
