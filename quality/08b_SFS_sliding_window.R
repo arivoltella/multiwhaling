@@ -52,11 +52,12 @@ for (i in 1:length(low_bound)) {
   
   # ---- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ----------
   if (length(fenetre) > 0) {
-    data_temp <- VCF1[fenetre,]         # On sélectionne cette fenêtre de SNPs
+    data_fenetre <- VCF1[fenetre,]         # On sélectionne cette fenêtre de SNPs
     
     # ---- #### Sélectionner 1 population ------------ 
     for (z in 1:length(list_pop)){
-      data_temp <- data_temp[, c("FORMAT",list_pop[[z]])]
+      
+      data_temp <- data_fenetre[, c("FORMAT",list_pop[[z]])]
       
       # ------- #### Filtrer les NA ... -----------
       genotypes <- extract.gt(data_temp, element = "GT", mask = FALSE, as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, convertNA = FALSE)
