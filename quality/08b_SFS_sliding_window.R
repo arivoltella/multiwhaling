@@ -45,7 +45,6 @@ upper_bound <- upper_bound[!is.na(upper_bound)]
 
 
 #### Pour chaque fenêtre : -----------------------------------------------------
-
 sfs_spectre_sliding <- c()
 
 for (i in 1:length(low_bound)) {
@@ -56,6 +55,7 @@ for (i in 1:length(low_bound)) {
     data_fenetre <- VCF1[fenetre,]         # On sélectionne cette fenêtre de SNPs
     
     # ---- #### Sélectionner 1 population ------------ 
+    temp_spectre <- c()
     for (z in 1:length(list_pop)){
       
       data_temp <- data_fenetre[, c("FORMAT",list_pop[[z]])]
@@ -66,7 +66,6 @@ for (i in 1:length(low_bound)) {
       data_temp <- subset(data_temp, NAs < 1)
       
       # ------- #### Et le SFS folded ... --------- # Sur le VCF filtré par : fenêtre, population et les NA 
-      temp_spectre <- c()
       data_bin <- vcfR2DNAbin(data_temp, extract.indels = TRUE, 
                               consensus = FALSE,  unphased_as_NA = FALSE, ref.seq = NULL, 
                               start.pos = NULL, verbose = TRUE) 
