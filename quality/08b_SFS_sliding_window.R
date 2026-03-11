@@ -38,6 +38,7 @@ upper_bound_indice <- seq(window, length(VectPosFiltered) + slide + window, slid
 
 low_bound <- VectPosFiltered[low_bound_indice]          # Prend positions 1, 10001, 20001, ... dans ce vecteur
 low_bound <- low_bound[!is.na(low_bound)]
+low_bound <- low_bound[1:1008]
 
 upper_bound <- VectPosFiltered[upper_bound_indice]      # Prend positions 50000, 60000, 70000, ... 
 upper_bound <- upper_bound[!is.na(upper_bound)]
