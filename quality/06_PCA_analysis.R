@@ -47,7 +47,7 @@ write.table(genotype_num, file = "/shared/projects/multiwhaling/multiwhaling/dat
             sep = "", row.names = F, col.names=F)
 
 #### Faire la PCA
-whale_pca <- pca(input.file = "/shared/projects/multiwhaling/multiwhaling/data/VCF_maf_LD_Pruned.5.geno")
+whale_pca <- pca(input.file = "~/Desktop/VCF_maf_LD_Pruned.5.geno")
 summary(whale_pca)
 
 # Eigenvalues : 
