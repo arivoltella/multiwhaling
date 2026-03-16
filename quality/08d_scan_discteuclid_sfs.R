@@ -25,7 +25,7 @@ source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
 # ------------------------------------------------------------------------------------------------------
 
 # Mise en forme des données : 
-sfs_spectre_sliding <- read_csv("/shared/projects/multiwhaling/multiwhaling/data/scan_genom/SFS/sfs_spectre_sliding_50_1e4.csv")
+sfs_spectre_sliding <- read_csv("/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/sfs_spectre_sliding_50_1e4.csv")
 positions_plot <- unlist(sfs_spectre_sliding[,1])
 sfs_spectre_sliding <- sfs_spectre_sliding[,-1]
 
