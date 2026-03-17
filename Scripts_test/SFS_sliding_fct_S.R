@@ -61,7 +61,9 @@ data <- VCF1[, c("FORMAT",list_pop[[z]])]
 
 # sliding window sur 1 pop 
 test_100K <- sliding_spectre_onepop(data, 100000, 25000)
+test_100K <- as.data.frame(test_100K)
 write_csv(test_100K, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/test_100K.csv")
 
 test_50K <- sliding_spectre_onepop(data, 50000, 10000)
+test_50K <- as.data.frame(test_50K)
 write_csv(test_50K, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/test_50K.csv")
