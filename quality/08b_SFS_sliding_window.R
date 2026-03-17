@@ -28,8 +28,8 @@ maf <- 0
 
 #### Préparation des bornes à chaque itération : -------------------------------
 
-slide <- 10000
-window <- 50000
+slide <- 25000
+window <- 100000
 
 vec_pos <- getPOS(VCF1)
 
@@ -88,7 +88,7 @@ for (i in 1:length(low_bound)) {
 # Mise en forme des données : 
 positions_plot <- (upper_bound + low_bound)/2
 sfs_spectre_final <- as.data.frame(na.omit(cbind(positions_plot, sfs_spectre_sliding)))
-write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/sfs_spectre_sliding_50_1e4.csv")
+write_csv(sfs_spectre_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/sfs_spectre_sliding_1e5_25.csv")
 
 # Calculer SFS norm par pop : 
 a <- 0
@@ -119,22 +119,22 @@ for (i in seq_along(list_pop)) {
   div_gen_final <- rbind(div_gen_final, divgen_spectre)
   
   # ----------  #### Plot des indices le long du chromosome : 
-  plot_div <- divgen_spectre |>
-    pivot_longer(cols = 2:5, 
-                 names_to = "indices_div", 
-                 values_to = "value") |>
-    ggplot(aes(x = positions, y = value, color = indices_div)) +
-    geom_point() +
-    facet_wrap(~ indices_div, scales = "free_y") +
-    labs(title = paste(names(list_pop[i])), 
-         x = "Positions", 
-         y = "Value", 
-         color = "Diversity indices")
-  list_plot_div[[i]] <- plot_div
-  
+  # plot_div <- divgen_spectre |>
+  #   pivot_longer(cols = 2:5, 
+  #                names_to = "indices_div", 
+  #                values_to = "value") |>
+  #   ggplot(aes(x = positions, y = value, color = indices_div)) +
+  #   geom_point() +
+  #   facet_wrap(~ indices_div, scales = "free_y") +
+  #   labs(title = paste(names(list_pop[i])), 
+  #        x = "Positions", 
+  #        y = "Value", 
+  #        color = "Diversity indices")
+  # list_plot_div[[i]] <- plot_div
+
   # ---------- #### On passe à la pop suivante : 
   a <- a + n_cols
 }
 
-saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/div_gen_final_50_1e4.RDS")
-saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/list_plot_div_50_1e4.RDS")
+saveRDS(div_gen_final, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/div_gen_final_1e5_25.RDS")
+#saveRDS(list_plot_div, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/list_plot_div_50_1e4.RDS")
