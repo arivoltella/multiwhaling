@@ -67,3 +67,96 @@ write_csv(test_100K, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom
 test_50K <- sliding_spectre_onepop(data, 50000, 10000)
 test_50K <- as.data.frame(test_50K)
 write_csv(test_50K, "/shared/projects/multiwhaling/multiwhaling/plot/scan_genom/SFS/test_50K.csv")
+
+
+
+######################################################
+######### Suite script SFS-sliding_fct_S #############
+######################################################
+
+# ----------  #### Calcul des indices de diversité : TD, Pi, W et S
+test_100K <- read_csv("~/Desktop/scan_genom/SFS/test_100K.csv")
+test_50K <- read_csv("~/Desktop/scan_genom/SFS/test_50K.csv")
+
+positions_plot_100K <- test_100K[,1]
+positions_plot_50K <- test_50K[,1]
+
+test_100K <- test_100K[,-1]
+test_50K <- test_50K[,-1]
+
+# Récupération du nb de SNP moyen par fenêtre : 
+qq = apply(test_100K, 1,calcola_TD_folded)                  
+divgen = matrix(unlist(qq), ncol= 4, nrow = nrow(test_100K), byrow = T)
+divgen_spectre_100K <- as_tibble(cbind(positions_plot_100K, divgen))
+colnames(divgen_spectre_100K) <- c("positions", "TD", "Pi", "W", "S")
+
+mean(divgen_spectre_100K$S)
+
+qq = apply(test_50K, 1,calcola_TD_folded)          # Calcul du SFS ligne par ligne          
+divgen = matrix(unlist(qq), ncol= 4, nrow = nrow(test_50K), byrow = T)
+divgen_spectre_50K <- as_tibble(cbind(positions_plot_50K, divgen))
+colnames(divgen_spectre_50K) <- c("positions", "TD", "Pi", "W", "S")
+
+mean(divgen_spectre_50K$S)
+
+
+# ------------------------------------------------------------------------------
+########## Calcul distance SFS fenêtre et SFS total, par population ############
+# ------------------------------------------------------------------------------
+
+# Pour Bering : 
+norm_sfs_bypop <- c(0.2601204, 0.2778992, 0.2899138, 0.2662977, 0.2760875, 0.2928641,
+                    0.2884587, 0.3032762, 0.2689080, 0.2542088, 0.2819353)
+
+################################### 100K ########################################
+
+n_cols <- length(list_pop[[z]])      # Nb d'individus appartenant à la pop i
+
+# ----------  #### Calcul de la distance euclidienne entre SFS norm total et par fenêtre : 
+eeeeee_norep <- t(apply(test_100K, 1, calcola_normalized_foldedSFS))
+sfsnorm_bywindow <- eeeeee_norep[, -c(1:n_cols)]
+
+dist_euclid <- apply(sfsnorm_bywindow, 1, calcola_dist_spettro, unlist(norm_sfs_bypop))
+
+dist_euclid_bypop_100K <- c(list(dist_euclid))
+
+# Récupération du nb de SNP par fenêtre : 
+qq = apply(test_100K, 1,calcola_TD_folded)          # Calcul du SFS ligne par ligne          
+divgen = matrix(unlist(qq), ncol= 4, nrow = nrow(test_100K), byrow = T)
+divgen_spectre <- as_tibble(cbind(positions_plot_100K, divgen))
+colnames(divgen_spectre) <- c("positions", "TD", "Pi", "W", "S")
+n_snp <- divgen_spectre$S
+mean((n_snp))
+
+
+dist_euclid_bypop_100K[[2]] <- positions_plot_100K
+final_dist_euclid_100K <- bind_cols(dist_euclid_bypop_100K)
+final_dist_euclid_100K |>
+  ggplot(aes(x = per_plot, y = ...1)) + 
+  geom_line()
+
+################################### 50K ########################################
+
+n_cols <- length(list_pop[[z]])      # Nb d'individus appartenant à la pop i
+
+# ----------  #### Calcul de la distance euclidienne entre SFS norm total et par fenêtre : 
+eeeeee_norep <- t(apply(test_50K, 1, calcola_normalized_foldedSFS))
+sfsnorm_bywindow <- eeeeee_norep[, -c(1:n_cols)]
+
+dist_euclid <- apply(sfsnorm_bywindow, 1, calcola_dist_spettro, unlist(norm_sfs_bypop))
+
+dist_euclid_bypop_50K <- c(list(dist_euclid))
+
+# Récupération du nb de SNP par fenêtre : 
+qq = apply(test_50K, 1,calcola_TD_folded)          # Calcul du SFS ligne par ligne          
+divgen = matrix(unlist(qq), ncol= 4, nrow = nrow(test_50K), byrow = T)
+divgen_spectre <- as_tibble(cbind(positions_plot_50K, divgen))
+colnames(divgen_spectre) <- c("positions", "TD", "Pi", "W", "S")
+n_snp <- divgen_spectre$S
+mean(n_snp)
+
+dist_euclid_bypop_50K[[2]] <- positions_plot_50K
+final_test_dist_50K <- bind_cols(dist_euclid_bypop_50K)
+final_test_dist_50K |>
+  ggplot(aes(x = per_plot, y = ...1)) + 
+  geom_line()
