@@ -6,6 +6,16 @@ library(vcfR)
 library(ggplot2)
 library(tidyverse)
 
+#######################################################################################################
+# ARGUMENTS à mettre en entrée :                                                                      #
+#         - VCF brut avec SNPs                                                                        #
+#                                                                                                     #
+# SORTIES de la fonction :                                                                            #
+#         - datasets des métriques de qualité : par indiv et par position                             #
+#         - Plot de qualité : profondeur, NA, hétérozygotie                                           # 
+#######################################################################################################
+
+
 #### ARGUMENTs : 
 args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
@@ -52,8 +62,8 @@ plot_quality <- function(VCF){
            prop_het = (het_pos/dim(geno1)[2])*100)                  # Proportion d'Hz / individu (%)
   head(summary_position)
   
-  saveRDS(summary_position, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_position_", 
-                                  chrom, ".RDS", sep = ""))
+  saveRDS(summary_position, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/", 
+                                  chrom, "_summary_position.RDS", sep = ""))
   
 
   #### Statistiques résumées liées aux INDIVIDUS #### -----------------------------------
@@ -70,8 +80,8 @@ plot_quality <- function(VCF){
            prop_het_pos = ((het_ind/dim(geno1)[1])*100))           # Proportion d'Hz / individu
   head(summary_individuals)
   
-  saveRDS(summary_individuals, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_indiv_", 
-                                     chrom, ".RDS", sep = ""))
+  saveRDS(summary_individuals, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/", 
+                                     chrom, "_summary_indiv.RDS", sep = ""))
   
 
   #### Plots des différentes statistiques #### ------------------------------------------
@@ -174,36 +184,36 @@ plot_quality <- function(VCF){
          title = "Mean depth per site per population")
   
   ## Save plots
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/DistribDepth", 
-             chrom, ".png"), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_DistribDepth.png"), 
+      width = 750, height = 750)
   print(g0)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/DepthPerSite", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_DepthPerSite.png", sep = ""), 
+      width = 750, height = 750)
   print(g1)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/DepthPerInd", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_DepthPerInd.png", sep = ""), 
+      width = 750, height = 750)
   print(g2)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/NAPerSite", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_NAPerSite.png", sep = ""), 
+      width = 750, height = 750)
   print(g3)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/NAPerInd", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_NAPerInd.png", sep = ""), 
+      width = 750, height = 750)
   print(g4)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/HetPerSite", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_HetPerSite.png", sep = ""), 
+      width = 750, height = 750)
   print(g5)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/HetPerInd", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_HetPerInd.png", sep = ""), 
+      width = 750, height = 750)
   print(g6)
   dev.off()
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/depth_by_pop", 
-             chrom, ".png", sep = ""), width = 750, height = 750)
+  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/01_Quality/", chrom, "_depth_by_pop.png", sep = ""), 
+      width = 750, height = 750)
   print(g7)
   dev.off()
   

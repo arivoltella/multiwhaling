@@ -10,8 +10,16 @@ library(ggplot2)
 library(tidyverse)
 library(pheatmap)
 
-# À FAIRE SUR UN SEUL CHROMOSOME (PAS BESOIN DE PLUS)
+#######################################################################################################
+# ARGUMENTS à mettre en entrée :                                                                      #
+#         - .king et .king.id issus de PLINK2                                                         #
+#                                                                                                     #
+# SORTIES de la fonction :                                                                            #
+#         - .csv des indices de relatedness entre indivs                                              #
+#         - Heatmap de la relatedness entre indivs                                                    # 
+#######################################################################################################
 
+# À FAIRE SUR UN SEUL CHROMOSOME (PAS BESOIN DE PLUS)
 
 # DANS SCRIPT BASH : 
 # Calcul de la relatedness directement sur le cluster avec PLINK2 : 
@@ -22,8 +30,8 @@ library(pheatmap)
 # -------------------------------------------------------------------------------------
 
 # Importer l'output de la kinship : 
-king_id <- read.table("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/relatedness/matrix_all.king.id")
-king <- readLines("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/relatedness/matrix_all.king")
+king_id <- read.table("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/matrix_all.king.id")
+king <- readLines("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/matrix_all.king")
 
 
 relatedness <- function(king_id, king) {
@@ -54,3 +62,4 @@ relatedness <- function(king_id, king) {
   heatmap_kinship
   dev.off()
 }
+##########################################################################################################
