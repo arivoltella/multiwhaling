@@ -8,10 +8,10 @@ library(tidyverse)
 
 #### ARGUMENTs : 
 args <- commandArgs(trailingOnly = TRUE)
-#chrom <- args[3]
-chrom <- "21"
+chrom <- args[1]
+#chrom <- "21"
 
-VCF1 <- read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/sample_chr", chrom, ".vcf.gz", 
+VCF1 <- read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", 
                         sep = ""))
 
 plot_quality <- function(VCF){
@@ -52,7 +52,7 @@ plot_quality <- function(VCF){
            prop_het = (het_pos/dim(geno1)[2])*100)                  # Proportion d'Hz / individu (%)
   head(summary_position)
   
-  saveRDS(summary_position, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_position", 
+  saveRDS(summary_position, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_position_", 
                                   chrom, ".RDS", sep = ""))
   
 
@@ -70,7 +70,7 @@ plot_quality <- function(VCF){
            prop_het_pos = ((het_ind/dim(geno1)[1])*100))           # Proportion d'Hz / individu
   head(summary_individuals)
   
-  saveRDS(summary_individuals, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_indiv", 
+  saveRDS(summary_individuals, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/summary_indiv_", 
                                      chrom, ".RDS", sep = ""))
   
 
@@ -210,4 +210,6 @@ plot_quality <- function(VCF){
 }
 # The end ------------------------------------------------------------------------------------------------
 
+
+plot_quality(VCF1)
 
