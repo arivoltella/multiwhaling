@@ -58,8 +58,8 @@ relatedness <- function(king_id, king) {
   heatmap_kinship <- pheatmap(relatedness_king, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise relatedness", 
            color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(60), 
            breaks = seq(from = -0.1, to = 0.5, by = 0.01))
-  png(paste0("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/heatmap_kinship.png", sep = ""), 
-      width = 750, height = 750)
+  png("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/heatmap_kinship.png", 
+      width = 850, height = 750)
   heatmap_kinship
   dev.off()
 }
