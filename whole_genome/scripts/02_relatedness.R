@@ -55,12 +55,11 @@ relatedness <- function(king_id, king) {
   relatedness_king <- as.data.frame(relatedness_king)
   saveRDS(relatedness_king, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/kinship.RDS")
   
-  heatmap_kinship <- pheatmap(relatedness_king, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise relatedness", 
-           color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(60), 
-           breaks = seq(from = -0.1, to = 0.5, by = 0.01))
   png("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/heatmap_kinship.png", 
       width = 850, height = 750)
-  heatmap_kinship
+  pheatmap(relatedness_king, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise relatedness", 
+                              color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(60), 
+                              breaks = seq(from = -0.1, to = 0.5, by = 0.01))
   dev.off()
 }
 ##########################################################################################################
