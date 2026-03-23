@@ -53,7 +53,7 @@ relatedness <- function(king_id, king) {
   colnames(relatedness_king) <- king_id$V1 
   rownames(relatedness_king) <- king_id$V1        # Ajout des noms d'individus 
   relatedness_king <- as.data.frame(relatedness_king)
-  write_csv(relatedness_king, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/kinship.csv")
+  write.csv(relatedness_king, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/02_relatedness/kinship.csv")
   
   heatmap_kinship <- pheatmap(relatedness_king, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise relatedness", 
            color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(60), 
