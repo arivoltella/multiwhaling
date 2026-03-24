@@ -23,11 +23,11 @@ library(tidyverse)
 
 #### ARGUMENTs : 
 args <- commandArgs(trailingOnly = TRUE)
-#chrom <- args[3]
-chrom <- 21
+chrom <- args[1]
+#chrom <- 21
 
 VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
-VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
+#VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
 
 
 filtering_VCF <- function(VCF1) {
@@ -134,9 +134,9 @@ filtering_VCF <- function(VCF1) {
   write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                             name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
 }
+################################################################################################################
 
-
-
+filtering_VCF(VCF)
 
 
 
