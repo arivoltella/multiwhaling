@@ -54,7 +54,7 @@ filtering_VCF <- function(VCF1) {
     mutate(Population = factor(Population, levels = order)) |>
     arrange(Population)
   ############ Filtrer tous les individus détectés mauvais ##############
-  list_pop <- split(names_ind$value, names_ind$pop)
+  list_pop <- split(names_ind$Individu, names_ind$Population)
   
   saveRDS(list_pop, "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
   saveRDS(names_ind, "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
@@ -131,7 +131,7 @@ filtering_VCF <- function(VCF1) {
   # Assigner chaque individu à une pop et les mettre dans le bon ordre 
   VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
   
-  write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
+  vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                             name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
 }
 ################################################################################################################
