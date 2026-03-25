@@ -90,7 +90,7 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
   # Dataframe final issu de la fusion des valeurs de FST à chaque itération de bootstrap : 
   tab_fst_all <- c()
   
-  for (n in permut) {
+  for (n in 1:permut) {
     # Permutter les individus entre les pops : 
     names_ind_perm <- names_ind     # Pour garder la liste originale pour faire le sample à chaque permutation 
     names_ind_perm$Individu <- sample(names_ind$Individu)
