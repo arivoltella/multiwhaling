@@ -112,7 +112,22 @@ calcola_normalized_foldedSFS<-function(vettore_sfs){
   return(ssss)
 }
 
+################# FUNZIONE 17  #############################
+##############################################################################################################################
 
+mpd_from_sfs<-function(sfs, folded=TRUE){
+  ### check if it is folded or not
+  if (isTRUE(folded)){n_ind<-2*length(sfs)}
+  else {n_ind<-length(sfs)}
+  ###
+  mpd=0
+  for (i in 1:length(sfs)){
+    mpd=mpd+(((n_ind-i)*i)*sfs[i])
+  }
+  mpd=mpd/((n_ind*(n_ind-1))/2)
+  
+  return(mpd)
+}
 
 ################# FUNZIONE 20  ############################# calcola la D di tajima a partire d'un SFS folded
 ##############################################################################################################################
