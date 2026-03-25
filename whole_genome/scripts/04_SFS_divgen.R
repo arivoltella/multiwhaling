@@ -26,8 +26,8 @@ library(coala)
 
 #### ARGUMENTs : ---------------------------------------------------------------------------------#
 args <- commandArgs(trailingOnly = TRUE)
-#chrom <- args[3]
-chrom <- 21
+chrom <- args[1]
+#chrom <- 21
 
 VCF_all = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_all_filtered_", 
                            chrom, ".vcf.gz", sep = ""))  
@@ -36,7 +36,7 @@ VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/d
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 
 ### Fonctions sources /!\ À MODIFIER :
-source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
+source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
 
 
 SFS_diversity <- function(VCF1, VCF_all, list_pop){     # -----------------------------------------# 
@@ -46,6 +46,11 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
   sfs_pop <- c()
   norm_sfs <- c()
   
+  # Sauvegarde du vecteur de position total : (pour sliding window SFS)
+  vec_pos_all <- getPOS(VCF_all)
+  saveRDS(vec_pos_all, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
+                             chrom, ".RDS", sep = ""))
+
   #-------------------------------------------------------------------------------------------------#
   ############################# SFS et DIVERSITÉ GÉNÉTIQUE pop par pop ##############################
   #-------------------------------------------------------------------------------------------------#
@@ -109,13 +114,17 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     div_gen <- unlist(calcola_TD_folded(sfs_tot)) 
     names(div_gen) <- c("TD", "Pi", "W", "S")
     div_gen <- as_tibble(t(as.data.frame(div_gen))) |>
-      mutate(Pi = Pi/length(positions_all),      # Pour les deux estimateurs, on scale par le nb total 
-             W = W/length(positions_all))        # de positions séquencées (SNP & NPP)
-    write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_div_gen_", chrom, ".csv", sep = ""))
+      mutate(Pi = Pi/length(positions_all),                       # Pour les deux estimateurs, on scale par le nb total 
+             W = W/length(positions_all))                         # de positions séquencées (SNP & NPP)
+    write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_div_gen_wh_", chrom, ".csv", sep = ""))
   }
   saveRDS(sfs_pop, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/SFS_all_pop.RDS")
   saveRDS(norm_sfs, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/SFS_norm_all_pop.RDS")
 }
+##################################################################################################################
+
+
+SFS_diversity(VCF, VCF_all, list_pop)
 
 
 
