@@ -237,3 +237,14 @@ sliding_fst_spectre<-function(dati, lista_pop, window, slide, maf){
   
   return(lista_risultati)
 }
+
+
+########################## FOLD DAF SPECTRUM from COALA ##################################
+fold_dafSFS_coala<-function(dati){
+  dati2<- c(rep(0, (length(dati)+1)/2))
+  for (i in 1:(length(dati2)-1)) {
+    dati2[i] <- dati[i] + dati[length(dati)+1-i]
+  }
+  dati2[length(dati2)]<-dati[(length(dati)+1)/2]
+  return(dati2)
+}
