@@ -24,19 +24,19 @@ library(pheatmap)
 
 #### ARGUMENTS : 
 args <- commandArgs(trailingOnly = TRUE)
-#chrom <- args[3]
-chrom <- 21
+chrom <- args[1]
+#chrom <- 21
 
 VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
                       chrom, ".vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
+list_pop <- list_pop[1:6]
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
 
+permut = args[2]
 
-### Fonctions sources /!\ À MODIFIER :
-source("/shared/projects/multiwhaling/multiwhaling/quality/functions_for_td.r")
-
-
+### Fonctions sources :
+source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
 
 fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----------------------------# 
   
@@ -141,7 +141,9 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
   }
   write.csv(fst_pval, file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_pval.csv")
 }
+###############################################################################################################
 
+fst_pairwise_bootstrap(VCF, list_pop, names_ind, permut)
 
 
 
