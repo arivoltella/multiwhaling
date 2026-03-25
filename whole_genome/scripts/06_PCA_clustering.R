@@ -29,12 +29,13 @@ library(LEA)
 
 #### ARGUMENTS :  
 args <- commandArgs(trailingOnly = TRUE)
-#chrom <- args[3]
-chrom <- 21
+chrom <- args[1]
+#chrom <- 21
 
 VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
                       chrom, ".vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
+list_pop <- list_pop[1:6]
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
 
 
@@ -67,7 +68,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   
   #### PCA : --------------------------------------------------------------------------------------------
   whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""))
-  summary(whale_pca)
+  #summary(whale_pca)
   
   projectpca <- load.pcaProject(paste("VCF_", chrom, ".pcaProject", sep = ""))
   
@@ -110,9 +111,9 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #------------------------------------------------------------------------------------------------------
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
-  whale_snmf <- snmf(input.file= "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_21.geno", 
+  whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
                      K= 1:6, repetitions = 3, project="new", entropy=T)
-  summary(whale_snmf)
+  #summary(whale_snmf)
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
   
   
