@@ -84,7 +84,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   eigen_pca <- read.table(paste(projectpca@projDir, projectpca@pcaDir, projectpca@eigenvalue.file, sep = ""))
   eigen_pca <- (eigen_pca / ((sum(eigen_pca)))) * 100
   eigen_pca <- unlist(round(eigen_pca, digits = 2))
-  
+  saveRDS(eigen_pca, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/eigenvalues_", chrom, ".RDS", sep = ""))
   
   #### SAUVEGARDE DES PLOTS : --------------------------------------------------------------------------
   
@@ -95,7 +95,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
     mutate(pop = names_ind |> arrange(Population))
   saveRDS(proj, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/projections_ACP_", chrom, ".RDS", sep = ""))
   
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/ACP_", chrom, ".pdf", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/ACP_", chrom, ".png", sep = ""))
   proj |>
     ggplot(aes(x = V1, y = V2, color = pop$Population)) + 
     geom_point(size = 2) + 
@@ -117,12 +117,13 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
   
   
-  pdf(file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/entropy_K_", chrom, ".pdf")
+  pdf(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/entropy_K_", chrom, ".pdf", sep = ""))
   plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
   dev.off()
   
   #### MISE EN FORME DES RÉSULTATS : -------------------------------------------------------------------
   list_plot <- c()
+  adm_coeff_all <- c()
   order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "N_ATL")
   
   for (i in 2:6) {
@@ -134,10 +135,11 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
              pop = factor(names_ind$Population, levels = order)) |>
       arrange(pop) |>
       pivot_longer(cols = 1:i, names_to = "K", values_to = "Ancestry_prop") |>
-      mutate(K = gsub("V", "", K))
+      mutate(K = gsub("V", "", K), 
+             K_i = i)
     
-    saveRDS(adm_coeff, paste(projectsNMF@projDir, projectsNMF@snmfDir, "ancestry_", chrom, "_K_", i, ".RDS", sep = ""))
-    
+    adm_coeff_all <- rbind(adm_coeff_all, adm_coeff)
+  
     plot_structure <- adm_coeff |>
       mutate(ind = factor(ind, levels = unique(adm_coeff$ind))) |>
       ggplot(aes(x = ind, y = Ancestry_prop, fill = K, color = K)) + 
@@ -149,9 +151,8 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
     list_plot <- c(list_plot, list(plot_structure))
   }
   
-  structure <- wrap_plots(list_plot) + plot_layout(axis_titles = "collect")
-  saveRDS(structure, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/structure_", chrom, ".RDS"))
-  
+  saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/plot_struct_", chrom, ".RDS"))
+  saveRDS(adm_coeff_all, paste(projectsNMF@projDir, projectsNMF@snmfDir, "admix_ancestry_", chrom, ".RDS", sep = ""))
 }
 #####################################################################################################
 
