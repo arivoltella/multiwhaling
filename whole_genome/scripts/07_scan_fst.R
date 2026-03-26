@@ -61,7 +61,7 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
     
     # ------- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ----------
     if (length(fenetre) > 0) {
-      data_temp <- VCF1[fenetre,]         # On sélectionne cette fenêtre de SNPs
+      data_temp <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
       
       #### On calcule le pairwise FST de Hudson ... :
       fst_temp <- data.frame(matrix(NA, nrow = 1, ncol = ncol(pairs)))
@@ -140,7 +140,7 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
 }
 #########################################################################################################
 
-fst_sliding_window(VCF1, list_pop, window, slide)
+fst_sliding_window(VCF, list_pop, window, slide)
 
 
 
