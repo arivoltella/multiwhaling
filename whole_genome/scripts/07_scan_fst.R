@@ -44,6 +44,9 @@ source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/foncti
 
 fst_sliding_window <- function(VCF, list_pop, window, slide){
   
+  slide <- slide
+  window <- window 
+  
   # Préparation des fenêtres : ---------------------------------------------------------
   vec_pos <- getPOS(VCF)
   low_bound <- seq(1, max(vec_pos) + slide, slide)
