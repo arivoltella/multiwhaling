@@ -39,6 +39,8 @@ VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/d
                       chrom, ".vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 
+# ATTENTION : IMPORTER LES FONCTIONS NÉCESSAIRES 
+source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
 
 fst_sliding_window <- function(VCF, list_pop, window, slide){
   
