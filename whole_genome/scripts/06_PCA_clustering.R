@@ -153,3 +153,6 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   saveRDS(structure, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/structure_", chrom, ".RDS"))
   
 }
+#####################################################################################################
+
+pca_clustering(VCF, list_pop, names_ind)
