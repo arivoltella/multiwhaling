@@ -10,6 +10,7 @@ library(ggplot2)
 library(tidyverse)
 library(pegas)
 library(LEA)
+library(patchwork)
 
 #######################################################################################################
 # ARGUMENTS à mettre en entrée :                                                                      #
@@ -34,7 +35,7 @@ slide <- args[3]
 #window <- 500000
 #slide <- 100000
 
-VCF1 = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
+VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
                       chrom, ".vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 

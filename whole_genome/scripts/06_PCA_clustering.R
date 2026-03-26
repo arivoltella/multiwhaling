@@ -151,7 +151,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
     list_plot <- c(list_plot, list(plot_structure))
   }
   
-  saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/plot_struct_", chrom, ".RDS"))
+  saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/plot_struct_", chrom, ".RDS", sep = ""))
   saveRDS(adm_coeff_all, paste(projectsNMF@projDir, projectsNMF@snmfDir, "admix_ancestry_", chrom, ".RDS", sep = ""))
 }
 #####################################################################################################
