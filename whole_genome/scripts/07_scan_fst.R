@@ -53,8 +53,8 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
   
   # Préparation des fenêtres : ---------------------------------------------------------
   vec_pos <- getPOS(VCF)
-  low_bound <- seq(1, max(vec_pos) + slide, slide)
-  upper_bound <- seq(window, max(vec_pos) + slide + window, slide)
+  low_bound <- seq(1, max(vec_pos), slide)
+  upper_bound <- seq(window, max(vec_pos) + window, slide)
   positions_plot <- (upper_bound + low_bound)/2
   n_pop <- length(list_pop)
   
