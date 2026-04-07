@@ -64,7 +64,8 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
   
   for (i in 1:length(low_bound)) {
     fenetre = which(vec_pos > low_bound[i] & vec_pos < upper_bound[i])
-    
+    print(i)
+    print(paste(length(fenetre)))
     # ------- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ----------
     if (length(fenetre) > 0) {
       data_temp <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
