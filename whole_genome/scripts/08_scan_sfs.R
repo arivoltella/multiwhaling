@@ -71,16 +71,17 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     fenetre <- which(vec_pos >= low_bound[i] & vec_pos <= upper_bound[i])
     fenetre_all[i] <- length(which(VectPosFiltered >= low_bound[i] & VectPosFiltered <= upper_bound[i])) # Nombre total de positions après filtres par fenêtres
     
-    print(i)
-    print(paste(length(fenetre)))
+    print(paste("Fenêtre", i))
     
     # ---- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ---------------
     if (length(fenetre) > 0) {
       data_fenetre <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
+      print(paste(length(fenetre)))
       
       # ---- #### Sélectionner 1 population ------------ 
       temp_spectre <- c()
       for (z in 1:length(list_pop)){
+        print(paste(names(list_pop[z])))
         
         data_temp <- data_fenetre[, c("FORMAT",list_pop[[z]])]
         
