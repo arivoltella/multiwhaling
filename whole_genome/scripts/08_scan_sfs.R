@@ -27,9 +27,12 @@ library(patchwork)
 args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
+print(chrom)
 
 window <- as.numeric(args[2])
+print(window)
 slide <- as.numeric(args[3])
+print(slide)
 #window <- 500000
 #slide <- 100000
 
@@ -68,6 +71,9 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     fenetre <- which(vec_pos >= low_bound[i] & vec_pos <= upper_bound[i])
     fenetre_all[i] <- length(which(VectPosFiltered >= low_bound[i] & VectPosFiltered <= upper_bound[i])) # Nombre total de positions après filtres par fenêtres
     
+    print(i)
+    print(paste(length(fenetre)))
+    
     # ---- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ---------------
     if (length(fenetre) > 0) {
       data_fenetre <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
@@ -98,7 +104,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
       sfs_spectre_sliding <- rbind(sfs_spectre_sliding, rep(NaN,length(unlist(list_pop))))
     }
   }
-  
+  print("Calcul indices de diversité")
   # ------------------------------------------------------------------------------
   #################### Calculs des indices de diversité ##########################
   # ------------------------------------------------------------------------------
@@ -138,6 +144,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     a <- a + n_cols
   }
   saveRDS(div_gen_final, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/SFS/", chrom, "_div_gen_final_", window, "_", slide, ".csv", sep = ""))
+  print("Sauvegarde des valeurs de diversité génétique par fenêtre")
 }
 #########################################################################################################
 
