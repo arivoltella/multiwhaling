@@ -40,7 +40,7 @@ VCF <- read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/
 VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
                                   chrom, ".RDS", sep = ""))                 # Toutes les positions du chromosomes 
 
-list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/data/list_pop.RDS")
+list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 list_pop <- list_pop[1:6]
 
 # ATTENTION : IMPORTER LES FONCTIONS NÉCESSAIRES 
