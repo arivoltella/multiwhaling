@@ -48,9 +48,6 @@ source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/foncti
 
 fst_sliding_window <- function(VCF, list_pop, window, slide){
   
-  slide <- slide
-  window <- window 
-  
   # Préparation des fenêtres : ---------------------------------------------------------
   vec_pos <- getPOS(VCF)
   low_bound <- seq(1, max(vec_pos), slide)
@@ -92,12 +89,13 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
       fst_pairwise_sliding <- rbind(fst_pairwise_sliding, rep(NaN, n_pop*(n_pop-1)/2))
     }
   }
+  print("FST par paires calculés")
   
   # Mise en forme du jeu de données : 
   finale_fst <- na.omit(cbind(positions_plot, fst_pairwise_sliding))
   finale_fst <- as_tibble(finale_fst)
   write_csv(finale_fst, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_fst_pairwise_sliding_hudson.csv", sep = ""))
-  
+  print("Sauvegarde de finale_fst")
   
   #### MISE EN FORME ET GRAPHIQUES : ---------------------------------------------------------------
   list_sliding <- list()
@@ -130,9 +128,9 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
     
     list_sliding[[k]] <- plot_sliding 
   }
-  
+  print("Plot des sliding window pour chaque paire de population")
   saveRDS(list_sliding, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_list_sliding_fst_hudson.RDS", sep = ""))
-  
+  print("Sauvegarde des plots")
   
   pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_sliding_FST_hudson.pdf", sep = ""), 
       width = 20, height = 12)
