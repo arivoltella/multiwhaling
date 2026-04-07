@@ -50,8 +50,8 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
   
   # Préparation des fenêtres : ---------------------------------------------------------
   vec_pos <- getPOS(VCF)
-  low_bound <- seq(1, max(vec_pos), slide)
-  upper_bound <- seq(window, max(vec_pos) + window, slide)
+  low_bound <- seq(1, max(vec_pos) + slide, slide)
+  upper_bound <- seq(window, max(vec_pos) + window + slide, slide)
   positions_plot <- (upper_bound + low_bound)/2
   n_pop <- length(list_pop)
   
@@ -67,7 +67,7 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
     print(i)
     print(paste(length(fenetre)))
     # ------- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ----------
-    if (length(fenetre) > 0) {
+    if (length(fenetre) > 1) {
       data_temp <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
       
       #### On calcule le pairwise FST de Hudson ... :
