@@ -28,8 +28,8 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
 
-window <- args[2]
-slide <- args[3]
+window <- as.numeric(args[2])
+slide <- as.numeric(args[3])
 #window <- 500000
 #slide <- 100000
 
