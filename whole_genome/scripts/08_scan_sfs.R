@@ -74,7 +74,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     print(paste("Fenêtre", i))
     
     # ---- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ---------------
-    if (length(fenetre) > 0) {
+    if (length(fenetre) > 5) {
       data_fenetre <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
       print(paste(length(fenetre)))
       
