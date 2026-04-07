@@ -41,6 +41,7 @@ VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/who
                                   chrom, ".RDS", sep = ""))                 # Toutes les positions du chromosomes 
 
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/data/list_pop.RDS")
+list_pop <- list_pop[1:6]
 
 # ATTENTION : IMPORTER LES FONCTIONS NÉCESSAIRES 
 source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
@@ -49,7 +50,7 @@ source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/foncti
 
 ################################ SLIDING WINDOW ################################
 
-fst_sliding_window <- function(VCF, list_pop, window, slide){
+div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
   
   # Préparation des bornes à chaque itération : ---------------------------------------
   vec_pos <- getPOS(VCF)
@@ -138,4 +139,6 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
   }
   saveRDS(div_gen_final, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/SFS/", chrom, "_div_gen_final_", window, "_", slide, ".csv", sep = ""))
 }
+#########################################################################################################
 
+div_sliding_window(VCF, list_pop, window, slide, VectPosFiltered)
