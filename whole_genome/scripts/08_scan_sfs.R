@@ -144,7 +144,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     # ---------- #### On passe à la pop suivante : 
     a <- a + n_cols
   }
-  saveRDS(div_gen_final, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/SFS/", chrom, "_div_gen_final_", window, "_", slide, ".csv", sep = ""))
+  saveRDS(div_gen_final, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/SFS/", chrom, "_div_gen_final_", window, "_", slide, ".RDS", sep = ""))
   print("Sauvegarde des valeurs de diversité génétique par fenêtre")
 }
 #########################################################################################################
