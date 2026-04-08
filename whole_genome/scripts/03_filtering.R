@@ -112,19 +112,19 @@ filtering_VCF <- function(VCF) {
     # maf <- apply(freq_both, 1, min)
     
     # Enlève les sites non polymorphiques : 
-    VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
+    VCF_DP_hz <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
     #VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
   }
   
   
   #### MISSING DATA : ---------------------------------------------------------------------
-  genotypes <- extract.gt(VCF_DP_hz_SNP, element = "GT", mask = FALSE, 
+  genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, 
                           as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
                           extract = TRUE, convertNA = FALSE)
-  positions <- getPOS(VCF_DP_hz_SNP)
+  positions <- getPOS(VCF_DP_hz)
   
   NAs_pos <- rowSums(genotypes == "./.")
-  VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP, NAs_pos < n_ind*0.2)
+  VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
   
   
   #### SAUVEGARDE : -----------------------------------------------------------------------
