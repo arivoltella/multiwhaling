@@ -16,10 +16,9 @@ library(hierfstat)
 #         - VCF avec SNPs ; vecteur toutes les positions (SNP & NPP) ;                                #
 #         - objets (liste et tibble) contenant les noms des pops et les individus associés            #
 #         - n° chromosome                                                                             #
-#         - Tailles de fenêtre et pas à modifier directement dans le script                           #
+#         - Tailles de fenêtre (pas à modifier directement dans le script bash)                        #
 #                                                                                                     #
 # SORTIES de la fonction :                                                                            #
-#         - VCF transformé en .geno (par chromosome)                                                  #
 #         - Scan d'ACP sur les SNPs : dataset et plot variance PC1 & PC2 le long du chr               #
 #         - Scan d'ACP sur les positions :                                                            #
 #                             - dataset et plot variance PC1 & 2 le long du chr                       #
@@ -40,11 +39,11 @@ VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/who
                                  chrom, ".RDS", sep = ""))         
 
 
-PCA_scan <- function(VCF1, vec_pos, names_ind){
+PCA_scan <- function(VCF, vec_pos, names_ind){
   
   #### Initialization : objets re-used 
-  vectNom <- c(names(VCF1@gt[1,])[-1]) 
-  vec_snps_pos <- getPOS(VCF1)
+  vectNom <- c(names(VCF@gt[1,])[-1]) 
+  vec_snps_pos <- getPOS(VCF)
   
   #------------------------------------------------------------------------------------------------------
   ################################# PCA sliding window scan on the SNPs ################################# 
@@ -71,7 +70,7 @@ PCA_scan <- function(VCF1, vec_pos, names_ind){
     if (upper_bound[i] <= snp_total) {         # If not yet the end of the VCF 
       
       # ---- #### Convert the VCF to genind ...
-      data_moment <- VCF1[low_bound[i]:upper_bound[i],]
+      data_moment <- VCF[low_bound[i]:upper_bound[i],]
       genotype <- extract.gt(data_moment, element = "GT", mask = FALSE, as.numeric=F,
                              return.alleles = FALSE, IDtoRowNames = TRUE, 
                              extract = TRUE, convertNA = FALSE)
@@ -96,10 +95,12 @@ PCA_scan <- function(VCF1, vec_pos, names_ind){
   
   finale <- cbind(low_f, upper_f, PC1, PC2)  
   
+  # ---- #### Finalize and save the data.frames : -----------------------------------------------------------
   finale <- as.data.frame(finale) |>
     mutate(position = (low_f + upper_f)/2)
   saveRDS(finale, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_snps.RDS", sep = ""))
   
+  # ---- #### Plot it : -----------------------------------------------------------
   pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_snps.pdf", sep = ""))
   finale |>
     ggplot() + 
@@ -119,12 +120,12 @@ PCA_scan <- function(VCF1, vec_pos, names_ind){
   window <- 500000
   slide <- 100000
   
-  vec_snps_pos <- getPOS(VCF1)
+  vec_snps_pos <- getPOS(VCF)
   
-  low_bound <- seq(1, max(VectPosFiltered) + slide, slide)
-  upper_bound <- seq(window, max(VectPosFiltered) + window + slide, slide)
+  low_bound <- seq(1, max(vec_pos) + slide, slide)
+  upper_bound <- seq(window, max(vec_pos) + window + slide, slide)
   
-  snp_total <- last(VectPosFiltered)
+  snp_total <- last(vec_pos)
   
   # Initialize : 
   final_acp_var1_2 <- c()
@@ -138,7 +139,7 @@ PCA_scan <- function(VCF1, vec_pos, names_ind){
       fenetre = which(vec_snps_pos >= low_bound[i] & vec_snps_pos <= upper_bound[i])
       
       # ---- #### Convert the VCF to genind ...
-      data_moment <- VCF1[fenetre,]
+      data_moment <- VCF[fenetre,]
       genotype <- extract.gt(data_moment, element = "GT", mask = FALSE, as.numeric=F,
                              return.alleles = FALSE, IDtoRowNames = TRUE, 
                              extract = TRUE, convertNA = FALSE)
@@ -219,7 +220,7 @@ PCA_scan <- function(VCF1, vec_pos, names_ind){
 }
 #########################################################################################################
 
-
+PCA_scan(VCF, VectPosFiltered, names_ind)
 
 
 
