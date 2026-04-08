@@ -9,6 +9,8 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(adegenet)
+if (!require("hierfstat", quietly = TRUE))
+  install.packages("hierfstat")
 library(hierfstat)
 
 #######################################################################################################
