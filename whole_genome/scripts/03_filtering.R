@@ -26,13 +26,13 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
 
-VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
-#VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
+#VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
+VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
 
 
-filtering_VCF <- function(VCF1) {
+filtering_VCF <- function(VCF) {
   DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
-  name_object <- deparse(substitute(VCF1))
+  name_object <- deparse(substitute(VCF))
   
   # -------------------------------------------------------------------------------------
   ################################ NOMS & POPULATIONS ###################################
@@ -67,10 +67,10 @@ filtering_VCF <- function(VCF1) {
   ################# Et des analyses que l'on veut faire ensuite ######################
   
   #### PROFONDEUR : -----------------------------------------------------------------------
-  DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
+  DP1 <- extract.gt(VCF, element='DP', as.numeric = TRUE) 
   depth = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
   
-  VCF_DP <- subset(VCF1, depth$depth_pos > 10 & depth$depth_pos < 60)        # À modifier en f° des besoins
+  VCF_DP <- subset(VCF, depth$depth_pos > 10 & depth$depth_pos < 60)        # À modifier en f° des besoins
   # Position avec trop ou pas assez de profondeur filtrées                   
   
   
@@ -83,7 +83,7 @@ filtering_VCF <- function(VCF1) {
   VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10) # À modifier en f° des besoins
   
   if (name_object == "VCF") {
-    #### MINOR ALLELE FREQUENCY : ------------------------------------------------------------
+    #### ENLEVER POSITIONS MONOMORPHIQUES : --------------------------------------------------
     # Fonction qui assigne les génotypes : 
     fun_geno_allele<-function(data){
       for (i in 1:length(data)) {
@@ -136,7 +136,7 @@ filtering_VCF <- function(VCF1) {
 }
 ################################################################################################################
 
-filtering_VCF(VCF)
-
+#filtering_VCF(VCF)
+filtering_VCF(VCF_all)
 
 
