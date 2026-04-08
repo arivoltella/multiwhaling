@@ -9,8 +9,6 @@ library(qqman)
 library(ggplot2)
 library(tidyverse)
 library(adegenet)
-if (!require("hierfstat", quietly = TRUE))
-  install.packages("hierfstat")
 library(hierfstat)
 
 #######################################################################################################
@@ -37,7 +35,7 @@ VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/d
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 list_pop <- list_pop[1:6]
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
-VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos_all_", 
+VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
                                  chrom, ".RDS", sep = ""))         
 
 
