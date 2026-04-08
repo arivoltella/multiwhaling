@@ -31,7 +31,7 @@ VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTo
 
 
 filtering_VCF <- function(VCF) {
-  DP1 <- extract.gt(VCF1, element='DP', as.numeric = TRUE) 
+  DP1 <- extract.gt(VCF, element='DP', as.numeric = TRUE) 
   name_object <- deparse(substitute(VCF))
   
   # -------------------------------------------------------------------------------------
