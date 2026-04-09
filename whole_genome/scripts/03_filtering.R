@@ -83,6 +83,7 @@ filtering_VCF <- function(VCF) {
   VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10) # À modifier en f° des besoins
   
   if (name_object == "VCF") {
+    #### FOR VCF WITH ONLY SNPs
     #### ENLEVER POSITIONS MONOMORPHIQUES : --------------------------------------------------
     # Fonction qui assigne les génotypes : 
     fun_geno_allele<-function(data){
@@ -114,25 +115,44 @@ filtering_VCF <- function(VCF) {
     # Enlève les sites non polymorphiques : 
     VCF_DP_hz <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
     #VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
+    
+    
+    #### MISSING DATA : ---------------------------------------------------------------------
+    genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, 
+                            as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
+                            extract = TRUE, convertNA = FALSE)
+    positions <- getPOS(VCF_DP_hz)
+    
+    NAs_pos <- rowSums(genotypes == "./.")
+    VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
+    
+    
+    #### SAUVEGARDE : -----------------------------------------------------------------------
+    # Assigner chaque individu à une pop et les mettre dans le bon ordre 
+    VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
+    
+    vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
+                                                    name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
+
+  } else
+  { #### FOR VCF with ALL POSITIONS : 
+    #### MISSING DATA : ---------------------------------------------------------------------
+    genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, 
+                            as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
+                            extract = TRUE, convertNA = FALSE)
+    positions <- getPOS(VCF_DP_hz)
+    
+    NAs_pos <- rowSums(genotypes == "./.")
+    VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
+    
+    #### SAUVEGARDE : -----------------------------------------------------------------------
+    # Assigner chaque individu à une pop et les mettre dans le bon ordre 
+    VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))] 
+    
+    vec_pos <- getPOS(VCF_DP_hz_SNP_NA_ordered)
+    saveRDS(vec_pos, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/pos_", 
+                           name_object, "_filtered_", chrom, ".RDS", sep = ""))
   }
-  
-  
-  #### MISSING DATA : ---------------------------------------------------------------------
-  genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, 
-                          as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
-                          extract = TRUE, convertNA = FALSE)
-  positions <- getPOS(VCF_DP_hz)
-  
-  NAs_pos <- rowSums(genotypes == "./.")
-  VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
-  
-  
-  #### SAUVEGARDE : -----------------------------------------------------------------------
-  # Assigner chaque individu à une pop et les mettre dans le bon ordre 
-  VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
-  
-  vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
-                                            name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
 }
 ################################################################################################################
 
