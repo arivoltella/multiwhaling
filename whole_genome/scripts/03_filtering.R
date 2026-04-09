@@ -17,7 +17,7 @@ library(tidyverse)
 #                                                                                                     #
 # SORTIES de la fonction :                                                                            #
 #         - VCF filtré sur profondeur, Hz, NA, positions non polymorphiques                           #
-#         - VCF_all : mêmes filtres mais on garde les sites non polymorphiques                        #
+#         - vecteur positions & VCF_all : mêmes filtres mais on garde les sites non polymorphiques    #
 #         - names_ind et list_pop : association individus et pop (sous forme de liste ou tibble)      #
 #######################################################################################################
 
@@ -152,6 +152,8 @@ filtering_VCF <- function(VCF) {
     vec_pos <- getPOS(VCF_DP_hz_SNP_NA_ordered)
     saveRDS(vec_pos, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/pos_", 
                            name_object, "_filtered_", chrom, ".RDS", sep = ""))
+    vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
+                                                    name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
   }
 }
 ################################################################################################################

@@ -73,7 +73,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   projectpca <- load.pcaProject(paste("VCF_", chrom, ".pcaProject", sep = ""))
   
   # Eigenvalues : 
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/eigenvalues_", chrom, ".pdf", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/eigenvalues_", chrom, ".png", sep = ""))
   plot(whale_pca, lwd = 5, col = "blue", cex = .7, xlab = ("Factors"), ylab = "Eigenvalues")
   dev.off()
   
@@ -117,7 +117,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
   
   
-  pdf(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/entropy_K_", chrom, ".pdf", sep = ""))
+  png(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/entropy_K_", chrom, ".png", sep = ""))
   plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
   dev.off()
   

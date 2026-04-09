@@ -41,15 +41,8 @@ source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/foncti
 
 SFS_diversity <- function(VCF1, VCF_all, list_pop){     # -----------------------------------------# 
   
-  #list_pop$all <- unlist(list_pop, use.names = F)
-  
   sfs_pop <- c()
   norm_sfs <- c()
-  
-  # Sauvegarde du vecteur de position total : (pour sliding window SFS)
-  vec_pos_all <- getPOS(VCF_all)
-  saveRDS(vec_pos_all, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
-                             chrom, ".RDS", sep = ""))
 
   #-------------------------------------------------------------------------------------------------#
   ############################# SFS et DIVERSITÉ GÉNÉTIQUE pop par pop ##############################
@@ -77,8 +70,6 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     data_all <- subset(data_all, NAs < 1)
     positions_all <- getPOS(data_all)
     
-    #saveRDS(positions_all, paste("/shared/projects/multiwhaling/multiwhaling/data/vect_position/pos_", names(list_pop[i]), ".RDS", sep = ""))
-    
     #### Calcul du SFS : ----------------------------------------------------------------------
     dati_bin <- vcfR2DNAbin(data, extract.indels = TRUE, consensus = FALSE, 
                             unphased_as_NA = FALSE, ref.seq = NULL, start.pos = NULL,
@@ -87,7 +78,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     sfs_pop <- c(sfs_pop, list(sfs_tot))
     
     #### Plot SFS : 
-    pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_", chrom, ".pdf", sep = ""))
+    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_", chrom, ".png", sep = ""))
     barplot(sfs_tot, legend.text = paste(names(list_pop[i]))) 
     dev.off()
     
@@ -104,7 +95,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     norm_simulated_sfs <- calcola_normalized_foldedSFS(sim_folded_sfs)
     
     #### Plot normalized SFS + modèle neutre : 
-    pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_norm_", chrom, ".pdf", sep = ""))
+    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_norm_", chrom, ".png", sep = ""))
     plot(norm_sfs_tot, type = "l", ylim = c(0, 0.5))
     lines(norm_simulated_sfs, col=4)
     title(main = paste(names(list_pop[i])))

@@ -133,7 +133,7 @@ fst_sliding_window <- function(VCF, list_pop, window, slide){
   saveRDS(list_sliding, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_list_sliding_fst_hudson.RDS", sep = ""))
   print("Sauvegarde des plots")
   
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_sliding_FST_hudson.pdf", sep = ""), 
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/FST/", chrom, "_sliding_FST_hudson.png", sep = ""), 
       width = 20, height = 12)
   wrap_plots(list_sliding) + plot_layout(axis_titles = "collect", 
                                          axes = "keep",

@@ -101,7 +101,7 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
   saveRDS(finale, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_snps.RDS", sep = ""))
   
   # ---- #### Plot it : -----------------------------------------------------------
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_snps.pdf", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_snps.png", sep = ""))
   finale |>
     ggplot() + 
     geom_point(aes(x = position, y = PC1)) +
@@ -197,7 +197,7 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
   saveRDS(scan_acp_coord1_2, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_coords.RDS", sep = ""))
   
   # ---- #### Plot it : ------------------------------------------------------------------------
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_var_pos.pdf", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_var_pos.png", sep = ""))
   scan_acp_var1_2 |>
     ggplot(aes(x = position, y = Variance, color = PC)) + 
     geom_point(alpha = 0.3) +
@@ -205,7 +205,7 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
     scale_color_manual(values = c("PC1" = "black", "PC2" = "red"))
   dev.off()
   
-  pdf(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_coord.pdf", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/07_scan_genom/PCA/", chrom, "_scan_pca_coord.png", sep = ""))
   scan_acp_coord1_2 |>
     filter(PC == "PC1") |>
     ggplot(aes(x = position, y = coords, color = Pop)) + 
