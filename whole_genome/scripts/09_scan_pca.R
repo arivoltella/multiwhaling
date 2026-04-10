@@ -32,14 +32,10 @@ chrom <- args[1]
 
 VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
                       chrom, ".vcf.gz", sep = ""))   
-list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
-list_pop <- list_pop[1:6]
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
-VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
-                                 chrom, ".RDS", sep = ""))         
 
 
-PCA_scan <- function(VCF, vec_pos, names_ind){
+PCA_scan <- function(VCF, names_ind, min_n_snp){
   
   #### Initialization : objets re-used 
   vectNom <- c(names(VCF@gt[1,])[-1]) 
@@ -94,6 +90,7 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
   }
   
   finale <- cbind(low_f, upper_f, PC1, PC2)  
+  print("Computed PCA sliding window on SNPs")
   
   # ---- #### Finalize and save the data.frames : -----------------------------------------------------------
   finale <- as.data.frame(finale) |>
@@ -109,6 +106,7 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
     scale_y_continuous(limits = c(0, 0.2))
   dev.off()
   
+  print("Saved data & plot")
 
   #------------------------------------------------------------------------------------------------------
   ################################ PCA sliding window scan on the positions #############################
@@ -122,22 +120,23 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
   
   vec_snps_pos <- getPOS(VCF)
   
-  low_bound <- seq(1, max(vec_pos) + slide, slide)
-  upper_bound <- seq(window, max(vec_pos) + window + slide, slide)
+  low_bound <- seq(1, max(vec_snps_pos) - slide, slide)
+  upper_bound <- low_bound + window
   
-  snp_total <- last(vec_pos)
+  snp_total <- last(vec_snps_pos)
   
   # Initialize : 
   final_acp_var1_2 <- c()
   final_acp_coord1_2 <- c()
-
   
   #### For each window : ---------------------------------------------------------------------
   for (i in 1:length(low_bound)) {              
-    if (upper_bound[i] <= snp_total) {         # If not yet the end of the VCF 
-      
-      fenetre = which(vec_snps_pos >= low_bound[i] & vec_snps_pos <= upper_bound[i])
-      
+    
+    fenetre = which(vec_snps_pos >= low_bound[i] & vec_snps_pos <= upper_bound[i])
+    print(length(fenetre))
+    
+      if (length(fenetre) > min_n_snp) {         # If suficient number of SNP in the window
+        
       # ---- #### Convert the VCF to genind ...
       data_moment <- VCF[fenetre,]
       genotype <- extract.gt(data_moment, element = "GT", mask = FALSE, as.numeric=F,
@@ -175,9 +174,13 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
       
       final_acp_coord1_2 <- rbind(final_acp_coord1_2, scan_acp_pos) 
       
-      
+      } else {                                           # If not enough SNPs, passing
+        final_acp_var1_2 <- rbind(final_acp_var1_2, NA)
+        final_acp_coord1_2 <- rbind(final_acp_coord1_2, NA)
     }
   }
+  print("Computed PCA sliding window on positions")
+  
   # ---- #### Finalize the data.frames : -------------------------------------------------------
   scan_acp_var1_2 <- final_acp_var1_2 |>
     mutate(position = (low_f + upper_f)/2) |>
@@ -217,10 +220,12 @@ PCA_scan <- function(VCF, vec_pos, names_ind){
          title = paste("Scan PCA : 86 individuals PC1 coords along the chr", chrom))
   dev.off()
   
+  print("Saved data & plots")
 }
 #########################################################################################################
+min_n_snp <- 100
 
-PCA_scan(VCF, VectPosFiltered, names_ind)
+PCA_scan(VCF, names_ind, min_n_snp)
 
 
 

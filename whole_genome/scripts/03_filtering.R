@@ -150,8 +150,8 @@ filtering_VCF <- function(VCF) {
     VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))] 
     
     vec_pos <- getPOS(VCF_DP_hz_SNP_NA_ordered)
-    saveRDS(vec_pos, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/pos_", 
-                           name_object, "_filtered_", chrom, ".RDS", sep = ""))
+    saveRDS(vec_pos, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/vec_pos/vec_pos_all_", 
+                           chrom, ".RDS", sep = ""))
     vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                                     name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
   }
