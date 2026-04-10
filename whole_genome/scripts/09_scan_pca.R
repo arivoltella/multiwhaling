@@ -174,10 +174,7 @@ PCA_scan <- function(VCF, names_ind, min_n_snp){
       
       final_acp_coord1_2 <- rbind(final_acp_coord1_2, scan_acp_pos) 
       
-      } else {                                           # If not enough SNPs, passing
-        final_acp_var1_2 <- rbind(final_acp_var1_2, NA)
-        final_acp_coord1_2 <- rbind(final_acp_coord1_2, NA)
-    }
+      }
   }
   print("Computed PCA sliding window on positions")
   
