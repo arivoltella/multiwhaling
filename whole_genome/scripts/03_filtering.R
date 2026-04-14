@@ -26,8 +26,8 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
 
-#VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
-VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
+VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
+#VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
 
 
 filtering_VCF <- function(VCF) {
@@ -112,27 +112,51 @@ filtering_VCF <- function(VCF) {
     # freq_both <- cbind(freq_ALT, freq_REF)
     # maf <- apply(freq_both, 1, min)
     
-    # Enlève les sites non polymorphiques : 
-    VCF_DP_hz <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
-    #VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
+      # Enlève les sites non polymorphiques : 
+      VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
     
-    
-    #### MISSING DATA : ---------------------------------------------------------------------
-    genotypes <- extract.gt(VCF_DP_hz, element = "GT", mask = FALSE, 
+      #### MISSING DATA : ----------------------------------------------------------------------
+      genotypes <- extract.gt(VCF_DP_hz_SNP, element = "GT", mask = FALSE, 
                             as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
                             extract = TRUE, convertNA = FALSE)
-    positions <- getPOS(VCF_DP_hz)
+      positions <- getPOS(VCF_DP_hz_SNP)
     
-    NAs_pos <- rowSums(genotypes == "./.")
-    VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz, NAs_pos < n_ind*0.2)
+      NAs_pos <- rowSums(genotypes == "./.")
+      VCF_DP_hz_SNP_NApos <- subset(VCF_DP_hz_SNP, NAs_pos < n_ind*0.2)
     
     
-    #### SAUVEGARDE : -----------------------------------------------------------------------
-    # Assigner chaque individu à une pop et les mettre dans le bon ordre 
-    VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
+      #### SAUVEGARDE : ------------------------------------------------------------------------
+      # Assigner chaque individu à une pop et les mettre dans le bon ordre 
+      VCF_DP_hz_SNP_NA_ordered <- VCF_DP_hz_SNP_NApos[,c("FORMAT", unlist(list_pop))]       
     
-    vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
+      vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                                     name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
+    
+      ############################## POUR VCF FILTRÉ SUR LA MAF : ###############################
+      # On reprend le VCF déjà filtré sur DP : 
+      freq_both <- cbind(freq_ALT, freq_REF)
+      maf <- apply(freq_both, 1, min)
+    
+      # On enlève aussi les sites dont la MAF < 0.05 : -------------
+      VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
+    
+    
+      #### MISSING DATA : ---------------------------------------------------------------------
+      genotypes <- extract.gt(VCF_DP_hz_SNP_MAF, element = "GT", mask = FALSE, 
+                            as.numeric=F,return.alleles = FALSE, IDtoRowNames = TRUE, 
+                            extract = TRUE, convertNA = FALSE)
+      positions <- getPOS(VCF_DP_hz_SNP_MAF)
+    
+      NAs_pos <- rowSums(genotypes == "./.")
+      VCF_DP_hz_SNP_MAF_NApos <- subset(VCF_DP_hz_SNP_MAF, NAs_pos < n_ind*0.2)
+    
+    
+      #### SAUVEGARDE : -----------------------------------------------------------------------
+      # Assigner chaque individu à une pop et les mettre dans le bon ordre 
+      VCF_DP_hz_SNP_MAF_NA_ordered <- VCF_DP_hz_SNP_MAF_NApos[,c("FORMAT", unlist(list_pop))]       
+    
+      vcfR::write.vcf(VCF_DP_hz_SNP_MAF_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
+                                                    name_object, "_filtered_maf_", chrom, ".vcf.gz", sep = ""))
 
   } else
   { #### FOR VCF with ALL POSITIONS : 
@@ -158,7 +182,7 @@ filtering_VCF <- function(VCF) {
 }
 ################################################################################################################
 
-#filtering_VCF(VCF)
-filtering_VCF(VCF_all)
+filtering_VCF(VCF)
+#filtering_VCF(VCF_all)
 
 
