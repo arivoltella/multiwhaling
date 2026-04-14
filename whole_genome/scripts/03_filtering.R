@@ -59,6 +59,8 @@ filtering_VCF <- function(VCF) {
   saveRDS(list_pop, "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
   saveRDS(names_ind, "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
   
+  # Enlever les individus problématiques (relatedness) : 
+  VCF <- VCF[,c("FORMAT", unlist(list_pop))] 
   
   # ----------------------------------------------------------------------------------
   ################################## FILTRES : #######################################
