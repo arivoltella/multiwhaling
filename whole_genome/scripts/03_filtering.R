@@ -74,7 +74,7 @@ filtering_VCF <- function(VCF) {
   
   VCF_DP <- subset(VCF, depth$depth_pos > 10 & depth$depth_pos < 60)        # À modifier en f° des besoins
   # Position avec trop ou pas assez de profondeur filtrées                   
-  
+  print("Depth of coverage filtered")
   
   #### HÉTÉROZZYGOTIE : -------------------------------------------------------------------
   geno1 <- as.data.frame(extract.gt(VCF_DP, element="GT", mask=F,as.numeric=F,
@@ -83,6 +83,7 @@ filtering_VCF <- function(VCF) {
   n_ind <- dim(geno1)[2]
   het <- data.frame(het_pos = rowSums(geno1 == "0/1"))    # Nb d'Hz / position
   VCF_DP_hz <- subset(VCF_DP, het$het_pos < (n_ind*8)/10) # À modifier en f° des besoins
+  print("Heterozigosity filtered")
   
   if (name_object == "VCF") {
     #### FOR VCF WITH ONLY SNPs
@@ -133,7 +134,8 @@ filtering_VCF <- function(VCF) {
     
       vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                                     name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
-    
+      print("Saved VCF_filtered")
+      
       ############################## POUR VCF FILTRÉ SUR LA MAF : ###############################
       # On reprend le VCF déjà filtré sur DP : 
       freq_both <- cbind(freq_ALT, freq_REF)
@@ -159,7 +161,8 @@ filtering_VCF <- function(VCF) {
     
       vcfR::write.vcf(VCF_DP_hz_SNP_MAF_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                                     name_object, "_filtered_maf_", chrom, ".vcf.gz", sep = ""))
-
+      print("Saved VCF_filtered_maf")
+      
   } else
   { #### FOR VCF with ALL POSITIONS : 
     #### MISSING DATA : ---------------------------------------------------------------------
@@ -180,6 +183,7 @@ filtering_VCF <- function(VCF) {
                            chrom, ".RDS", sep = ""))
     vcfR::write.vcf(VCF_DP_hz_SNP_NA_ordered, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/", 
                                                     name_object, "_filtered_", chrom, ".vcf.gz", sep = ""))
+    print("Saved VCF_all_filtered")
   }
 }
 ################################################################################################################
