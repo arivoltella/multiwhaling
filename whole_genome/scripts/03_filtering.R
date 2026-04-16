@@ -19,6 +19,7 @@ library(tidyverse)
 #         - VCF filtré sur profondeur, Hz, NA, positions non polymorphiques                           #
 #         - vecteur positions & VCF_all : mêmes filtres mais on garde les sites non polymorphiques    #
 #         - names_ind et list_pop : association individus et pop (sous forme de liste ou tibble)      #
+#         - VCF filtré sur la maf (0.05)                                                              #
 #######################################################################################################
 
 #### ARGUMENTs : 
@@ -26,8 +27,8 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
 
-VCF <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
-#VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/Achille/VCF/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
+VCF <- read.vcfR(paste("/shared/projects/multiwhaling/VCF_AllPops/HumpbackAllIndiv_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", sep = ""))
+VCF_all <- read.vcfR(paste("/shared/projects/multiwhaling/VCF_AllPops/HumpbackAllIndiv_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat.vcf.gz", sep = ""))
 
 
 filtering_VCF <- function(VCF) {
@@ -69,6 +70,7 @@ filtering_VCF <- function(VCF) {
   ################# Et des analyses que l'on veut faire ensuite ######################
   
   #### PROFONDEUR : -----------------------------------------------------------------------
+  
   DP1 <- extract.gt(VCF, element='DP', as.numeric = TRUE) 
   depth = data.frame(depth_pos = apply(DP1, 1, mean,na.rm=T))
   
@@ -77,6 +79,7 @@ filtering_VCF <- function(VCF) {
   print("Depth of coverage filtered")
   
   #### HÉTÉROZZYGOTIE : -------------------------------------------------------------------
+  
   geno1 <- as.data.frame(extract.gt(VCF_DP, element="GT", mask=F,as.numeric=F,
                                     return.alleles = F,convertNA = F,extract = T))
   # Génotype à chaque position pour chaque ind.
@@ -88,6 +91,7 @@ filtering_VCF <- function(VCF) {
   if (name_object == "VCF") {
     #### FOR VCF WITH ONLY SNPs
     #### ENLEVER POSITIONS MONOMORPHIQUES : --------------------------------------------------
+    
     # Fonction qui assigne les génotypes : 
     fun_geno_allele<-function(data){
       for (i in 1:length(data)) {
@@ -112,9 +116,8 @@ filtering_VCF <- function(VCF) {
     # À chaque position : 
     freq_ALT <- apply(count_allele, 1, sum, na.rm = T)/ (n_ind*2)   ## Fréquence de l'allèle alternatif 
     freq_REF <- 1 - freq_ALT                                        ## Fréquence de l'allèle de Réf
-    # freq_both <- cbind(freq_ALT, freq_REF)
-    # maf <- apply(freq_both, 1, min)
     
+      ################################### POUR VCF NORMAL : ####################################
       # Enlève les sites non polymorphiques : 
       VCF_DP_hz_SNP <- subset(VCF_DP_hz, freq_REF > 0 | freq_REF < 1) 
     
@@ -137,11 +140,11 @@ filtering_VCF <- function(VCF) {
       print("Saved VCF_filtered")
       
       ############################## POUR VCF FILTRÉ SUR LA MAF : ###############################
-      # On reprend le VCF déjà filtré sur DP : 
+      # On reprend le VCF déjà filtré sur DP et Hz : (on reprend ) 
       freq_both <- cbind(freq_ALT, freq_REF)
       maf <- apply(freq_both, 1, min)
     
-      # On enlève aussi les sites dont la MAF < 0.05 : -------------
+      # On enlève aussi les sites dont la MAF < 0.05 : ----------------------------------------
       VCF_DP_hz_SNP_MAF <- subset(VCF_DP_hz_SNP, maf > 0.05) 
     
     
@@ -189,6 +192,6 @@ filtering_VCF <- function(VCF) {
 ################################################################################################################
 
 filtering_VCF(VCF)
-#filtering_VCF(VCF_all)
+filtering_VCF(VCF_all)
 
 
