@@ -21,7 +21,7 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- "21"
 
-VCF1 <- read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/HumpbackTot_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", 
+VCF1 <- read.vcfR(paste("/shared/projects/multiwhaling/VCF_AllPops/HumpbackAllIndiv_", chrom, "_GATK_TAG_Flowqual_Noindels_Norepeat_SNP.vcf.gz", 
                         sep = ""))
 
 plot_quality <- function(VCF){
@@ -86,12 +86,13 @@ plot_quality <- function(VCF){
 
   #### Plots des différentes statistiques #### ------------------------------------------
   # -------------------------------------------------------------------------------------
+  max_pos <- last(getPOS(VCF1))
   
   # Depth distribution
   g0 <- summary_position |>
     ggplot()+
     geom_histogram(aes(x = depth_pos),
-                   binwidth = 4, fill = "steelblue", color = "black") +
+                   binwidth = 3, fill = "steelblue", color = "black") +
     scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10)) +
     labs(x = "Distribution of average depth per site",
          y = "Count")
@@ -104,7 +105,7 @@ plot_quality <- function(VCF){
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
     labs(y="mean depth", x = "PB",
          title = "Average depth sequencing of SNPs")+
-    scale_x_continuous(breaks = seq(0, 30e+06, by = 1000000)) +
+    scale_x_continuous(breaks = seq(0, max_pos, by = 10000000)) +
     # vizualise only range of sequencing depth detph
     scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100))
   
@@ -117,7 +118,7 @@ plot_quality <- function(VCF){
          title = "Mean depth sequencing per individual") +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
     # vizualise only range of sequencing depth detph
-    scale_y_continuous(breaks = seq(0, 260, by = 20), limits = c(0, 260))
+    scale_y_continuous(breaks = seq(0, 100, by = 20), limits = c(0, 260))
   
   # NA per Position
   g3 <- summary_position |>
@@ -135,7 +136,7 @@ plot_quality <- function(VCF){
     ggplot() +
     geom_point(aes(y = prop_NA_ind, x = ind), color="purple", size=2) +
     labs(x="Ind", y = "Prop './.' site",
-         title = "Prop './.' site by individuals") +
+         title = "Prop './.' site by individuals (%)") +
     theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
     scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0, 100))
   
