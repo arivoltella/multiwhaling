@@ -164,18 +164,18 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
 }
 #####################################################################################################
 
-# Pour Nord Atlantique : 
-list_pop <- list_pop[6:7]
+# # Pour Nord Atlantique : 
+# list_pop <- list_pop[6:7]
+# names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
+#   unnest(Individu)
+# 
+# VCF <- VCF[,c("FORMAT", unlist(list_pop))] 
+
+# Pour hémisphère Sud :
+list_pop <- list_pop[c(3:5, 8)]
 names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
   unnest(Individu)
-
-VCF <- VCF[,c("FORMAT", unlist(list_pop))] 
-
-# # Pour hémisphère Sud :
-# list_pop <- list_pop[c(3:5, 8)]
-# names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
-# unnest(Individu)
-# VCF <- VCF[, c("FORMAT", unlist(list_pop))] 
+VCF <- VCF[, c("FORMAT", unlist(list_pop))]
   
 # Filtrer les pops dans le VCF avant de lancer la fonction : 
 
