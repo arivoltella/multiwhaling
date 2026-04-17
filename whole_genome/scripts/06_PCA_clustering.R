@@ -113,7 +113,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
   whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
-                     K= 1:6, repetitions = 3, project="new", entropy=T)
+                     K= 1:8, repetitions = 3, project="new", entropy=T)
   print("sNMF : Running sNMF")
   
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
