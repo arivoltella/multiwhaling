@@ -75,7 +75,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #summary(whale_pca)
   print("PCA : Running PCA")
   
-  projectpca <- load.pcaProject(paste("VCF_", chrom, ".pcaProject", sep = ""))
+  projectpca <- load.pcaProject(paste("VCF_", chrom,"_", names(list_pop)[1], ".pcaProject", sep = ""))
   
   # Eigenvalues : 
   png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/eigenvalues_", chrom, "_", names(list_pop)[1],".png", sep = ""))
