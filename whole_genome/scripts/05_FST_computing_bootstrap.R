@@ -54,6 +54,7 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
   colnames(tab_fst_obs) <- c("Combi", "FST")
   
   # Calcul du FST observé par paires : 
+  print("FST computing")
   for (k in seq_len(ncol(pairs))) {
     i <- pairs[1, k]
     j <- pairs[2, k]
@@ -66,14 +67,14 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
     tab_fst_obs[k, 1] <- paste(i, j, sep = "_")
     tab_fst_obs[k, 2] <- unlist(fst_pairwise[1]) 
   }
-  write.csv(fst_moy, file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_obs.csv")
-  write.csv(tab_fst_obs, file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_obs_long.csv")
+  write.csv(fst_moy, file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/", chrom,"_fst_obs.csv", sep = ""))
+  write.csv(tab_fst_obs, file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/", chrom,"_fst_obs_long.csv", sep = ""))
   
-  png("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_pairwise_heatmap.png", height = 750, width = 750)
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/", chrom,"_fst_pairwise_heatmap.png", sep = ""), height = 750, width = 750)
   pheatmap(fst_moy, cluster_rows=F, cluster_cols=F, na_col="white",main = "Pairwise Fst",
            color = colorRampPalette(c("seashell1", "yellow", "firebrick3"))(50))
   dev.off()
-  
+  print("Saved heatmap & observed FST data")
   
   
   #-----------------------------------------------------------------------------------------------------#
@@ -81,7 +82,7 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
   #-----------------------------------------------------------------------------------------------------#
   
   # Nombre de permutations à effectuer : 
-  print(permut)
+  print(paste("Running", permut, "permutations on FST"))
   
   # On crée le dataframe qui va accueillir les données de FST à chaque itération de bootstrap : 
   tab_fst_comb <- data.frame(matrix(NA, nrow = ncol(pairs), ncol = 2))
@@ -91,6 +92,7 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
   tab_fst_all <- c()
   
   for (n in 1:permut) {
+    print(n)
     # Permutter les individus entre les pops : 
     names_ind_perm <- names_ind     # Pour garder la liste originale pour faire le sample à chaque permutation 
     names_ind_perm$Individu <- sample(names_ind$Individu)
@@ -111,12 +113,13 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
     }
     tab_fst_all <- rbind(tab_fst_all, tab_fst_comb)       
   }
-  write.csv(tab_fst_all, file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_permut.csv")
-  
+  write.csv(tab_fst_all, file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/", chrom,"_fst_permut.csv", sep = ""))
+  print("Saved data permutations")
   
   #-----------------------------------------------------------------------------------------------------#
   ################################### Calcul des IC95 et p_value : ######################################
   #-----------------------------------------------------------------------------------------------------#
+  print("Computing p_values")
   
   tab_fst_obs                                 # FST observés 
   tab_stat <- tab_fst_all |>                  # FST permutations (si pop sont panmictiques)
@@ -139,7 +142,8 @@ fst_pairwise_bootstrap <- function(VCF1, list_pop, names_ind, permut) {  # -----
     # Et on assigne la p_value correspondant dans un df de la même forme que fst_moy : 
     fst_pval[i, j] <- tab_stat$p_value[p]
   }
-  write.csv(fst_pval, file = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/fst_pval.csv")
+  write.csv(fst_pval, file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/05_FST/", chrom,"_fst_pval.csv", sep = ""))
+  print("Saved p_values table")
 }
 ###############################################################################################################
 

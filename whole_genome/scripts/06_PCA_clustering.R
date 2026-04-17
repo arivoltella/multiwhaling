@@ -69,6 +69,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #### PCA : --------------------------------------------------------------------------------------------
   whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""))
   #summary(whale_pca)
+  print("PCA : Running PCA")
   
   projectpca <- load.pcaProject(paste("VCF_", chrom, ".pcaProject", sep = ""))
   
@@ -76,7 +77,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/eigenvalues_", chrom, ".png", sep = ""))
   plot(whale_pca, lwd = 5, col = "blue", cex = .7, xlab = ("Factors"), ylab = "Eigenvalues")
   dev.off()
-  
+  print("PCA : Printed eigenvalues")
   
   #### MISE EN FORME DES RÉSULTATS : -------------------------------------------------------------------
   
@@ -104,7 +105,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
          y = paste("PC2 ", as.character(eigen_pca[2]), "%"), 
          color = "Population")
   dev.off()
-  
+  print("PCA : Saved plots")
   
   #------------------------------------------------------------------------------------------------------
   ############################################# sNMF CLUSTERING #########################################
@@ -113,20 +114,22 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #### CLUSTERING : -------------------------------------------------------------------------------------
   whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
                      K= 1:6, repetitions = 3, project="new", entropy=T)
-  #summary(whale_snmf)
-  projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
+  print("sNMF : Running sNMF")
   
+  projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
   
   png(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/entropy_K_", chrom, ".png", sep = ""))
   plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
   dev.off()
+  print("sNMF : Printed entropy")
   
   #### MISE EN FORME DES RÉSULTATS : -------------------------------------------------------------------
   list_plot <- c()
   adm_coeff_all <- c()
-  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "N_ATL")
+  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "NATL", "MAINE", "SATL")
   
-  for (i in 2:6) {
+  print("Plotting results by number of K")
+  for (i in 2:length(order)) {
     best <- which.min(cross.entropy(whale_snmf, K = i))
     adm_coeff <- Q(whale_snmf, K = i, run = best)
     
@@ -153,6 +156,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   
   saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/plot_struct_", chrom, ".RDS", sep = ""))
   saveRDS(adm_coeff_all, paste(projectsNMF@projDir, projectsNMF@snmfDir, "admix_ancestry_", chrom, ".RDS", sep = ""))
+  print("sNMF : Saved plots and data")
 }
 #####################################################################################################
 
