@@ -133,7 +133,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "NATL", "MAINE", "SATL")
   
   print("Plotting results by number of K")
-  for (i in 2:length(order)) {
+  for (i in 2:length(list_plot)) {
     best <- which.min(cross.entropy(whale_snmf, K = i))
     adm_coeff <- Q(whale_snmf, K = i, run = best)
     
