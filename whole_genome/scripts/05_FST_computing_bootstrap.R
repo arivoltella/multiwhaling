@@ -30,7 +30,7 @@ chrom <- args[1]
 VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_maf_", 
                       chrom, "_LD_Pruned.vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
-list_pop <- list_pop[1:6]
+
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
 
 permut = as.numeric(args[2])
