@@ -70,6 +70,8 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     data_all <- subset(data_all, NAs < 1)
     positions_all <- getPOS(data_all)
     
+    rm(data_all) # Supprimer le gros VCF pour libérer de la mémoire pour la suite des calculs
+    
     #### Calcul du SFS : ----------------------------------------------------------------------
     dati_bin <- vcfR2DNAbin(data, extract.indels = TRUE, consensus = FALSE, 
                             unphased_as_NA = FALSE, ref.seq = NULL, start.pos = NULL,
@@ -78,7 +80,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     sfs_pop <- c(sfs_pop, list(sfs_tot))
     
     #### Plot SFS : 
-    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_", chrom, ".png", sep = ""))
+    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_SFS_", names(list_pop[i]), ".png", sep = ""))
     barplot(sfs_tot, legend.text = paste(names(list_pop[i]))) 
     dev.off()
     
@@ -95,7 +97,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     norm_simulated_sfs <- calcola_normalized_foldedSFS(sim_folded_sfs)
     
     #### Plot normalized SFS + modèle neutre : 
-    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_SFS_norm_", chrom, ".png", sep = ""))
+    png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_SFS_norm_", names(list_pop[i]), ".png", sep = ""))
     plot(norm_sfs_tot, type = "l", ylim = c(0, 0.5))
     lines(norm_simulated_sfs, col=4)
     title(main = paste(names(list_pop[i])))
@@ -107,10 +109,10 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     div_gen <- as_tibble(t(as.data.frame(div_gen))) |>
       mutate(Pi = Pi/length(positions_all),                       # Pour les deux estimateurs, on scale par le nb total 
              W = W/length(positions_all))                         # de positions séquencées (SNP & NPP)
-    write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", names(list_pop[i]), "_div_gen_wh_", chrom, ".csv", sep = ""))
+    write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_div_gen_wh_", names(list_pop[i]), ".csv", sep = ""))
   }
-  saveRDS(sfs_pop, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/SFS_all_pop.RDS")
-  saveRDS(norm_sfs, "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/SFS_norm_all_pop.RDS")
+  saveRDS(sfs_pop, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "SFS_all_pop.RDS", sep = ""))
+  saveRDS(norm_sfs, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "SFS_norm_all_pop.RDS", sep = ""))
 }
 ##################################################################################################################
 
