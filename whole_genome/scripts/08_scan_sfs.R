@@ -62,6 +62,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
   positions_plot <- (upper_bound + low_bound)/2
   n_pop <- length(list_pop)
   
+  print(length(low_bound))
   
   #### Pour chaque fenêtre : ----------------------------------------------------------
   sfs_spectre_sliding <- c()
