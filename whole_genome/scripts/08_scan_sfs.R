@@ -44,7 +44,7 @@ VectPosFiltered <- readRDS(paste("/shared/projects/multiwhaling/multiwhaling/who
                                   chrom, ".RDS", sep = ""))                 # Toutes les positions du chromosomes 
 
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
-list_pop <- list_pop[1:6]
+
 
 # ATTENTION : IMPORTER LES FONCTIONS NÉCESSAIRES 
 source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
@@ -75,7 +75,7 @@ div_sliding_window <- function(VCF, list_pop, window, slide, VectPosFiltered){
     print(paste("Fenêtre", i))
     
     # ---- #### ... s'il y a des SNPs dans la fenêtre de positions ...  ---------------
-    if (length(fenetre) > 5) {
+    if (length(fenetre) > 20) {
       data_fenetre <- VCF[fenetre,]         # On sélectionne cette fenêtre de SNPs
       print(paste(length(fenetre)))
       

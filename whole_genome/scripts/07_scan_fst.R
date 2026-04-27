@@ -41,7 +41,7 @@ print(slide)
 VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
                       chrom, ".vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
-list_pop <- list_pop[1:6]
+
 
 # ATTENTION : IMPORTER LES FONCTIONS NÉCESSAIRES 
 source("/shared/projects/multiwhaling/multiwhaling/whole_genome/fonctions/fonctions.R")
