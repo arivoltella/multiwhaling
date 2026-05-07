@@ -38,7 +38,7 @@ filtering_VCF <- function(VCF) {
   # -------------------------------------------------------------------------------------
   ################################ NOMS & POPULATIONS ###################################
   # -------------------------------------------------------------------------------------
-  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "NATL", "MAINE", "SATL")
+  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "SATL", "MADAGASCAR", "NATL", "MAINE")
   names_ind <- DP1 |> colnames() |> as_tibble()
   names_ind <- names_ind |>
     mutate(Population = str_extract(colnames(DP1), "^[A-Za-z]+|^[0-9]+")) |>
