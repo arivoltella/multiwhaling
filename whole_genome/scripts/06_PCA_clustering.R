@@ -113,7 +113,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
   whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
-                     K= 1:8, repetitions = 3, project="new", entropy=T)
+                     K= 1:8, repetitions = 10, project="new", entropy=T)
   print("sNMF : Running sNMF")
   
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
@@ -146,7 +146,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
     plot_structure <- adm_coeff |>
       mutate(ind = factor(ind, levels = unique(adm_coeff$ind))) |>
       ggplot(aes(x = ind, y = Ancestry_prop, fill = K, color = K)) + 
-      geom_col() + 
+      geom_col(show.legend = F) + 
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 3, color = "black")) + 
       labs(x = "Individu", 
            y = "Ancestry proportions")
