@@ -138,7 +138,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #### MISE EN FORME DES RÉSULTATS : -------------------------------------------------------------------
   list_plot <- c()
   adm_coeff_all <- c()
-  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "SATL", "MADAGASCAR", "NATL", "MAINE")
+  order <- c("BER", "KAR", "CHI", "PER", "WPA", "MAD", "SPM", "GOM")
   
   print("Plotting results by number of K")
   for (i in 2:length(order)) {

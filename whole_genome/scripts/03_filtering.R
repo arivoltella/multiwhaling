@@ -38,18 +38,18 @@ filtering_VCF <- function(VCF) {
   # -------------------------------------------------------------------------------------
   ################################ NOMS & POPULATIONS ###################################
   # -------------------------------------------------------------------------------------
-  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "SATL", "MADAGASCAR", "NATL", "MAINE")
+  order <- c("BER", "KAR", "CHI", "PER", "WPA", "MAD", "SPM", "GOM")
   names_ind <- DP1 |> colnames() |> as_tibble()
   names_ind <- names_ind |>
     mutate(Population = str_extract(colnames(DP1), "^[A-Za-z]+|^[0-9]+")) |>
-    mutate(Population = ifelse(Population == "A", "NATL",
-                        ifelse(Population == "Ber", "BERING", 
-                        ifelse(Population == "Chi", "CHILI",
-                        ifelse(Population == "Kar", "KARAGINSKY", 
-                        ifelse(Population == "Pe", "PEROU",
-                        ifelse(Population == "AN", "SATL", 
-                        ifelse(Population == "MnD", "MAINE",
-                        ifelse(Population == "MnS", "MAINE", "MADAGASCAR"))))))))) |>
+    mutate(Population = ifelse(Population == "A", "SPM",
+                        ifelse(Population == "Ber", "BER", 
+                        ifelse(Population == "Chi", "CHI",
+                        ifelse(Population == "Kar", "KAR", 
+                        ifelse(Population == "Pe", "PER",
+                        ifelse(Population == "AN", "WPA", 
+                        ifelse(Population == "MnD", "GOM",
+                        ifelse(Population == "MnS", "GOM", "MAD"))))))))) |>
     filter(!(value %in% c("Chi2", "A20_13"))) |>
     rename(Individu = value) |>
     mutate(Population = factor(Population, levels = order)) |>
