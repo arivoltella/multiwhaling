@@ -66,9 +66,15 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   write.table(genotype_num, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
               quote = F, sep = "", row.names = F, col.names=F)
   
+  
+  # Removing the previous version of the analysis : 
+  if (paste("VCF_", chrom, ".pcaProject", sep = "") %in% list.files(path = "/shared/projects/multiwhaling/multiwhaling/whole_genome/launcher/"))
+    {
+    remove.pcaProject(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/launcher/VCF_", chrom, ".pcaProject", sep = ""))
+  }
+  
   #### PCA : --------------------------------------------------------------------------------------------
   whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""))
-  #summary(whale_pca)
   print("PCA : Running PCA")
   
   projectpca <- load.pcaProject(paste("VCF_", chrom, ".pcaProject", sep = ""))
@@ -110,6 +116,12 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #------------------------------------------------------------------------------------------------------
   ############################################# sNMF CLUSTERING #########################################
   #------------------------------------------------------------------------------------------------------
+  
+  # Removing the previous version of the analysis : 
+  if (paste("VCF_", chrom, ".snmfProject", sep = "") %in% list.files(path = "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/"))
+  {
+    remove.lfmmProject (file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
+  }
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
   whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".geno", sep = ""), 
