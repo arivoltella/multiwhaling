@@ -43,6 +43,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
   
   sfs_pop <- c()
   norm_sfs <- c()
+  norm_sim_sfs <- c()
 
   #-------------------------------------------------------------------------------------------------#
   ############################# SFS et DIVERSITÉ GÉNÉTIQUE pop par pop ##############################
@@ -63,10 +64,10 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     NAs <- rowSums(genotypes == "./.")
     data <- subset(data, NAs < 1)
     
-    genotypes <- extract.gt(data_all, element = "GT", mask = FALSE, as.numeric=F,
+    genotypes_all <- extract.gt(data_all, element = "GT", mask = FALSE, as.numeric=F,
                             return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, 
                             convertNA = FALSE)
-    NAs <- rowSums(genotypes == "./.")
+    NAs <- rowSums(genotypes_all == "./.")
     data_all <- subset(data_all, NAs < 1)
     positions_all <- getPOS(data_all)
     
@@ -95,6 +96,7 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     sumstats <- simulate(kingman, seed = 23432)
     sim_folded_sfs <- fold_dafSFS_coala(sumstats$sfs)
     norm_simulated_sfs <- calcola_normalized_foldedSFS(sim_folded_sfs)
+    norm_sim_sfs <- c(norm_sim_sfs, list(norm_simulated_sfs))
     
     #### Plot normalized SFS + modèle neutre : 
     png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_SFS_norm_", names(list_pop[i]), ".png", sep = ""))
@@ -106,13 +108,24 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     #### Diversité génétique : Tajima's D, thetaPi, thetaS, S : -------------------------------
     div_gen <- unlist(calcola_TD_folded(sfs_tot)) 
     names(div_gen) <- c("TD", "Pi", "W", "S")
+    
+    # Adding mean heterozygoty by pop : 
+    het_ind = colSums(genotypes == "0/1")               # Nb d'Hz / Individu
+    prop_het_pos = ((het_ind/dim(genotypes)[1])*100)    # %Hz /Individu 
+    
     div_gen <- as_tibble(t(as.data.frame(div_gen))) |>
-      mutate(Pi = Pi/length(positions_all),                       # Pour les deux estimateurs, on scale par le nb total 
-             W = W/length(positions_all))                         # de positions séquencées (SNP & NPP)
+      mutate(Pi = Pi/length(positions_all),             # Pour les deux estimateurs, on scale par le nb total 
+             W = W/length(positions_all),               # de positions séquencées (SNP & NPP)
+             het_pop = mean(prop_het_pos))                         
+    
     write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_div_gen_wh_", names(list_pop[i]), ".csv", sep = ""))
   }
+  
+  # Objects with information on all populations : 
   saveRDS(sfs_pop, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "SFS_all_pop.RDS", sep = ""))
   saveRDS(norm_sfs, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "SFS_norm_all_pop.RDS", sep = ""))
+  saveRDS(norm_sim_sfs, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "SFS_norm_sim_pop.RDS", sep = ""))
+  
 }
 ##################################################################################################################
 
