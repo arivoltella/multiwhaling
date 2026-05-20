@@ -120,7 +120,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   # Removing the previous version of the analysis : 
   if (paste("VCF_", chrom, ".snmfProject", sep = "") %in% list.files(path = "/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/"))
   {
-    remove.lfmmProject (file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
+    remove.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/geno/VCF_", chrom, ".snmfProject", sep = ""))
   }
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
