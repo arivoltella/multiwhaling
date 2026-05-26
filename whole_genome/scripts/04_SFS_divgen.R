@@ -111,12 +111,12 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     
     # Adding mean heterozygoty by pop : 
     het_ind = colSums(genotypes == "0/1")               # Nb d'Hz / Individu
-    prop_het_pos = ((het_ind/dim(genotypes)[1])*100)    # %Hz /Individu 
+    prop_het_pos = (het_ind/dim(genotypes)[1])          # Proportion d'hétérozygotie par position 
     
     div_gen <- as_tibble(t(as.data.frame(div_gen))) |>
-      mutate(Pi = Pi/length(positions_all),             # Pour les deux estimateurs, on scale par le nb total 
-             W = W/length(positions_all),               # de positions séquencées (SNP & NPP)
-             het_pop = mean(prop_het_pos))                         
+      mutate(Pi = Pi/length(positions_all),                              # Pour les deux estimateurs, on scale par le nb total 
+             W = W/length(positions_all),                                # de positions séquencées (SNP & NPP)
+             het_pop = (mean(prop_het_pos)*1000)/length(positions_all))  # x1000 --> hétérozygotie par kb                        
     
     write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_div_gen_wh_", names(list_pop[i]), ".csv", sep = ""))
   }
