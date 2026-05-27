@@ -63,6 +63,9 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
                             convertNA = FALSE)
     NAs <- rowSums(genotypes == "./.")
     data <- subset(data, NAs < 1)
+    genotypes_NA <- extract.gt(data, element = "GT", mask = FALSE, as.numeric=F,
+                            return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, 
+                            convertNA = FALSE)
     
     genotypes_all <- extract.gt(data_all, element = "GT", mask = FALSE, as.numeric=F,
                             return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, 
@@ -70,6 +73,9 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     NAs <- rowSums(genotypes_all == "./.")
     data_all <- subset(data_all, NAs < 1)
     positions_all <- getPOS(data_all)
+    genotypes_all_NA <- extract.gt(data_all, element = "GT", mask = FALSE, as.numeric=F,
+                                return.alleles = FALSE, IDtoRowNames = TRUE, extract = TRUE, 
+                                convertNA = FALSE)
     
     rm(data_all) # Supprimer le gros VCF pour libérer de la mémoire pour la suite des calculs
     
@@ -110,13 +116,16 @@ SFS_diversity <- function(VCF1, VCF_all, list_pop){     # ----------------------
     names(div_gen) <- c("TD", "Pi", "W", "S")
     
     # Adding mean heterozygoty by pop : 
-    het_ind = colSums(genotypes == "0/1")               # Nb d'Hz / Individu
-    prop_het_pos = (het_ind/dim(genotypes)[1])          # Proportion d'hétérozygotie par position 
+    het_ind = colSums(genotypes_all_NA == "0/1")               # Nb d'Hz / Individu
+    prop_het_pos = (het_ind/dim(genotypes_all_NA)[1])          # Proportion d'hétérozygotie par position 
+    
+    print(dim(genotypes_all_NA)[1] == length(positions_all))
     
     div_gen <- as_tibble(t(as.data.frame(div_gen))) |>
       mutate(Pi = Pi/length(positions_all),                              # Pour les deux estimateurs, on scale par le nb total 
              W = W/length(positions_all),                                # de positions séquencées (SNP & NPP)
-             het_pop = (mean(prop_het_pos)*1000)/length(positions_all))  # x1000 --> hétérozygotie par kb                        
+             het_pop = (mean(het_ind)*1000)/length(positions_all),       # x1000 --> hétérozygotie par kb
+             prop_het = (mean(prop_het_pos)*1000))                         
     
     write.csv(div_gen, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/04_SFS/", chrom, "_div_gen_wh_", names(list_pop[i]), ".csv", sep = ""))
   }
