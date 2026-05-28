@@ -190,7 +190,9 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
 #   unnest(Individu)
 # VCF <- VCF[, c("FORMAT", unlist(list_pop))]
 
-# Assigner les bassins océaniques à chaque population : 
+# Assigner les bassins océaniques à chaque population :
+order <- c("BER", "KAR", "CHI", "PER", "WPA", "MAD", "SPM", "GOM")
+
 names_ind_basins <- names_ind |>
   mutate(basin = ifelse(Population == "BER" | Population == "KAR", "NORTH_PACIFIC", 
                       ifelse(Population == "PER" | Population == "CHI" | Population == "MAD" | Population == "WPA", "SOUTH_HEMISPHERE", "NORTH_ATLANTIC")))
