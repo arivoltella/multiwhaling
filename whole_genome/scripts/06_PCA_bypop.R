@@ -36,8 +36,8 @@ args <- commandArgs(trailingOnly = TRUE)
 chrom <- args[1]
 #chrom <- 21
 
-VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_", 
-                      chrom, ".vcf.gz", sep = ""))   
+VCF = read.vcfR(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/chrom/VCF_filtered_maf_", 
+                      chrom, "_LD_Pruned.vcf.gz", sep = ""))   
 list_pop <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/list_pop.RDS")
 
 names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/data/names_ind.RDS")
