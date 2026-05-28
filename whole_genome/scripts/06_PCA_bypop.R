@@ -45,6 +45,8 @@ names_ind <- readRDS("/shared/projects/multiwhaling/multiwhaling/whole_genome/da
 
 pca_clustering <- function(VCF1, list_pop, names_ind){
   
+  print(ocean)
+  
   #------------------------------------------------------------------------------------------------------
   #################################### PRINCIPAL COMPONENT ANALYSIS #####################################
   #------------------------------------------------------------------------------------------------------
@@ -67,18 +69,18 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   qqq <- apply(genotype, 1, fun_geno_allele)
   genotype_num <- matrix(as.numeric(qqq), ncol = n_ind, nrow = snps_tot, byrow = T)
   
-  write.table(genotype_num, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", names(list_pop)[1], ".geno", sep = ""), 
+  write.table(genotype_num, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""), 
               quote = F, sep = "", row.names = F, col.names=F)
   
   #### PCA : --------------------------------------------------------------------------------------------
-  whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", names(list_pop)[1], ".geno", sep = ""))
+  whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""))
   #summary(whale_pca)
   print("PCA : Running PCA")
   
-  projectpca <- load.pcaProject(paste("VCF_", chrom,"_", names(list_pop)[1], ".pcaProject", sep = ""))
+  projectpca <- load.pcaProject(paste("VCF_", chrom,"_", ocean, ".pcaProject", sep = ""))
   
   # Eigenvalues : 
-  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/eigenvalues_", chrom, "_", names(list_pop)[1],".png", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/eigenvalues_", chrom, "_", ocean,".png", sep = ""))
   plot(whale_pca, lwd = 5, col = "blue", cex = .7, xlab = ("Factors"), ylab = "Eigenvalues")
   dev.off()
   print("PCA : Printed eigenvalues")
@@ -89,7 +91,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   eigen_pca <- read.table(paste(projectpca@projDir, projectpca@pcaDir, projectpca@eigenvalue.file, sep = ""))
   eigen_pca <- (eigen_pca / ((sum(eigen_pca)))) * 100
   eigen_pca <- unlist(round(eigen_pca, digits = 2))
-  saveRDS(eigen_pca, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/eigenvalues_", chrom, "_", names(list_pop)[1], ".RDS", sep = ""))
+  saveRDS(eigen_pca, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/eigenvalues_", chrom, "_", ocean, ".RDS", sep = ""))
   
   #### SAUVEGARDE DES PLOTS : --------------------------------------------------------------------------
   
@@ -98,9 +100,9 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   proj <- as_tibble(proj) |>
     dplyr::select(1:4) |>
     mutate(pop = names_ind |> arrange(Population))
-  saveRDS(proj, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/projections_ACP_", chrom, "_", names(list_pop)[1], ".RDS", sep = ""))
+  saveRDS(proj, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/projections_ACP_", chrom, "_", ocean, ".RDS", sep = ""))
   
-  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/ACP_", chrom, "_", names(list_pop)[1], ".png", sep = ""))
+  png(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/ACP_", chrom, "_", ocean, ".png", sep = ""))
   proj |>
     ggplot(aes(x = V1, y = V2, color = pop$Population)) + 
     geom_point(size = 2) + 
@@ -116,13 +118,13 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #------------------------------------------------------------------------------------------------------
   
   #### CLUSTERING : -------------------------------------------------------------------------------------
-  whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", names(list_pop)[1], ".geno", sep = ""), 
+  whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""), 
                      K= 1:length(list_pop), repetitions = 3, project="new", entropy=T)
   print("sNMF : Running sNMF")
   
-  projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", names(list_pop)[1], ".snmfProject", sep = ""))
+  projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".snmfProject", sep = ""))
   
-  png(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/entropy_K_", chrom, "_", names(list_pop)[1], ".png", sep = ""))
+  png(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/entropy_K_", chrom, "_", ocean, ".png", sep = ""))
   plot(whale_snmf, col = "blue", pch = 19, cex = 1.2) ### Identifier le K avec l'entropie la plus faible
   dev.off()
   print("sNMF : Printed entropy")
@@ -130,7 +132,7 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   #### MISE EN FORME DES RÉSULTATS : -------------------------------------------------------------------
   list_plot <- c()
   adm_coeff_all <- c()
-  order <- c("BERING", "KARAGINSKY", "CHILI", "PEROU", "MADAGASCAR", "NATL", "MAINE", "SATL")
+  order <- c("BER", "KAR", "CHI", "PER", "MAD", "WAP", "SPM", "GOM")
   
   print("Plotting results by number of K")
   for (i in 2:length(list_pop)) {
@@ -158,8 +160,8 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
     list_plot <- c(list_plot, list(plot_structure))
   }
   
-  saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/plot_struct_", chrom, "_", names(list_pop)[1], ".RDS", sep = ""))
-  saveRDS(adm_coeff_all, paste(projectsNMF@projDir, projectsNMF@snmfDir, "admix_ancestry_", chrom, "_", names(list_pop)[1], ".RDS", sep = ""))
+  saveRDS(list_plot, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/plot_struct_", chrom, "_", ocean, ".RDS", sep = ""))
+  saveRDS(adm_coeff_all, paste(projectsNMF@projDir, projectsNMF@snmfDir, "admix_ancestry_", chrom, "_", ocean, ".RDS", sep = ""))
   print("sNMF : Saved plots and data")
 }
 #####################################################################################################
@@ -170,14 +172,33 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
 #   unnest(Individu)
 # 
 # VCF <- VCF[,c("FORMAT", unlist(list_pop))] 
+# # Pour hémisphère Sud :
+# list_pop <- list_pop[c(3:5, 8)]
+# names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
+#   unnest(Individu)
+# VCF <- VCF[, c("FORMAT", unlist(list_pop))]
 
-# Pour hémisphère Sud :
-list_pop <- list_pop[c(3:5, 8)]
-names_ind <- enframe(list_pop, name = "Population", value = "Individu") |>
-  unnest(Individu)
-VCF <- VCF[, c("FORMAT", unlist(list_pop))]
-  
-# Filtrer les pops dans le VCF avant de lancer la fonction : 
+# Assigner les bassins océaniques à chaque population : 
+names_ind_basins <- names_ind |>
+  mutate(basin = ifelse(Population == "BER" | Population == "KAR", "NORTH_PACIFIC", 
+                      ifelse(Population == "PER" | Population == "CHI" | Population == "MAD" | Population == "WPA", "SOUTH_HEMISPHERE", "NORTH_ATLANTIC")))
+list_pop_basins <- split(names_ind_basins$Individu, names_ind_basins$basin)
+basins <- names(list_pop_basins)
+
+for (ocean in basins) {
+  # Filtrer par ocean : 
+  names_ind_tmp <- names_ind_basins |>
+    filter(basin == ocean) |>
+    mutate(Population = as.character(Population))
+  list_pop_tmp <- split(names_ind_tmp$Individu, names_ind_tmp$Population)
+
+  # Appliquer le filtre sur le VCF :
+  colnames(VCF@gt)
+  VCF <- VCF[, c("FORMAT", unlist(list_pop_tmp))]
+  colnames(VCF@gt)
+
+  # Exécuter le code à chaque fois :
+  pca_clustering(VCF, list_pop, names_ind_tmp)
+}
 
 
-pca_clustering(VCF, list_pop, names_ind)
