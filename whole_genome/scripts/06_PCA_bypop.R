@@ -72,6 +72,12 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   write.table(genotype_num, paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""), 
               quote = F, sep = "", row.names = F, col.names=F)
   
+  # Removing the previous version of the analysis : 
+  if (paste("VCF_", chrom, "_", ocean, ".pcaProject", sep = "") %in% list.files(path = "/shared/projects/multiwhaling/multiwhaling/whole_genome/launcher/"))
+  {
+    remove.pcaProject(paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/launcher/VCF_", chrom, "_", ocean, ".pcaProject", sep = ""))
+  }
+  
   #### PCA : --------------------------------------------------------------------------------------------
   whale_pca <- pca(input.file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""))
   #summary(whale_pca)
@@ -117,9 +123,15 @@ pca_clustering <- function(VCF1, list_pop, names_ind){
   ############################################# sNMF CLUSTERING #########################################
   #------------------------------------------------------------------------------------------------------
   
+  # Removing the previous version of the analysis : 
+  if (paste("VCF_", chrom, ".snmfProject", sep = "") %in% list.files(path = "/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/"))
+  {
+    remove.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".snmfProject", sep = ""))
+  }
+  
   #### CLUSTERING : -------------------------------------------------------------------------------------
   whale_snmf <- snmf(input.file= paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".geno", sep = ""), 
-                     K= 1:length(list_pop), repetitions = 3, project="new", entropy=T)
+                     K= 1:length(list_pop), repetitions = 10, project="new", entropy=T)
   print("sNMF : Running sNMF")
   
   projectsNMF <- load.snmfProject(file = paste("/shared/projects/multiwhaling/multiwhaling/whole_genome/plot/06_PCA_clustering/by_pop/VCF_", chrom, "_", ocean, ".snmfProject", sep = ""))
@@ -194,11 +206,11 @@ for (ocean in basins) {
 
   # Appliquer le filtre sur le VCF :
   colnames(VCF@gt)
-  VCF <- VCF[, c("FORMAT", unlist(list_pop_tmp))]
-  colnames(VCF@gt)
+  VCF_tmp <- VCF[, c("FORMAT", unlist(list_pop_tmp))]
+  colnames(VCF_tmp@gt)
 
   # Exécuter le code à chaque fois :
-  pca_clustering(VCF, list_pop, names_ind_tmp)
+  pca_clustering(VCF_tmp, list_pop_tmp, names_ind_tmp)
 }
 
 
