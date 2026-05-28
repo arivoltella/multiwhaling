@@ -201,7 +201,8 @@ for (ocean in basins) {
   # Filtrer par ocean : 
   names_ind_tmp <- names_ind_basins |>
     filter(basin == ocean) |>
-    mutate(Population = as.character(Population))
+    #mutate(Population = as.character(Population)) |>
+    mutate(Population = factor(Population, levels = order))
   list_pop_tmp <- split(names_ind_tmp$Individu, names_ind_tmp$Population)
 
   # Appliquer le filtre sur le VCF :
